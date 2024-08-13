@@ -1,6 +1,6 @@
 import { JWTPayload, jwtVerify, SignJWT } from 'jose';
 
-const SECRET_KEY = process.env.NEXT_SESSION_SECRET;
+const SECRET_KEY = process.env.NEXT_PUBLIC_SESSION_SECRET;
 const ENCODED_SECRET_KEY = new TextEncoder().encode(SECRET_KEY);
 
 const secrets = {

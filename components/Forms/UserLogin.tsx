@@ -1,53 +1,70 @@
+import { session } from '@/services/session';
 import { FormChangeEventHandlerType } from '@/types/generic';
+import { LoginPayloadType } from '@/types/session';
 import { Button, Input } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { MouseEventHandler, useState } from 'react';
 import { FormControlWithLabel } from './ControlWithLabel';
 
-const FORM_INITIAL_VALUES = { email: '', password: '' };
+const FORM_INITIAL_VALUES = { identifier: '', password: '' };
 
 export function UserLoginForm({ role }: PropTypes) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [data, setData] = useState<LoginDataType>(FORM_INITIAL_VALUES);
+  const [formData, setFormData] = useState<LoginPayloadType>(FORM_INITIAL_VALUES);
+
+  const router = useRouter();
 
   const handleInputChange: FormChangeEventHandlerType = (event) => {
     const { name, value } = event.currentTarget;
 
-    setData((previousData) => ({ ...previousData, [name]: value }));
+    setFormData((previousFormData) => ({ ...previousFormData, [name]: value }));
   };
 
-  const handleUserRegistration = async (data: FormData) => {
-    'use server';
-
+  const handleUserLogin: MouseEventHandler<HTMLButtonElement> = async () => {
     try {
       setIsLoading(true);
 
-      const mutationResult = await data;
+      const redirectURL = await session.login(formData, role);
+
+      if (!redirectURL) {
+        return;
+      }
+
+      router.push(redirectURL);
     } catch (error) {
+      console.error('[FORMS COMPONENTS - USER LOGIN]: handleUserLogin', error);
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <form action={handleUserRegistration}>
+    <form>
       <FormControlWithLabel isRequired label='email'>
-        <Input type='email' placeholder='meuemail@google.com' onChange={handleInputChange} />
+        <Input
+          type='email'
+          name='identifier'
+          value={formData.identifier}
+          onChange={handleInputChange}
+          placeholder='meuemail@google.com'
+        />
       </FormControlWithLabel>
 
       <FormControlWithLabel isRequired label='senha'>
-        <Input type='password' placeholder='**********' />
+        <Input
+          type='password'
+          name='password'
+          placeholder='**********'
+          value={formData.password}
+          onChange={handleInputChange}
+        />
       </FormControlWithLabel>
 
-      <Button isLoading={isLoading} type='submit'>
+      <Button isLoading={isLoading} onClick={handleUserLogin}>
         iniciar sessão
       </Button>
     </form>
   );
-}
-
-interface LoginDataType {
-  email: string;
-  password: string;
 }
 
 interface PropTypes {

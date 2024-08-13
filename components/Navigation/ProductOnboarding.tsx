@@ -9,6 +9,8 @@ import {
   Text,
   useDisclosure,
 } from '@chakra-ui/react';
+import { UserLoginForm } from '../Forms/UserLogin';
+import { GenericModal } from '../Modals/Generic';
 
 export function ProductOnboardingNavigationBar({ children }: BaseComponentPropTypes) {
   const loginModalDislosures = useDisclosure();
@@ -37,6 +39,14 @@ export function ProductOnboardingNavigationBar({ children }: BaseComponentPropTy
         <Center paddingX='2rem' width='100%'>
           {children}
         </Center>
+
+        <GenericModal
+          isOpen={loginModalDislosures.isOpen}
+          onClose={loginModalDislosures.onClose}
+          title='entrar'
+        >
+          <UserLoginForm role='applicant' />
+        </GenericModal>
       </Flex>
     </main>
   );

@@ -1,7 +1,7 @@
 'use client';
 
-import { DashboardNavigation } from '@/components/Navigation/Dashboard';
+import { Heading } from '@chakra-ui/react';
 
-export function UserDashboardPage() {
-  <DashboardNavigation>LOGADO</DashboardNavigation>;
+export default function UserDashboardPage() {
+  return <Heading as='h1'>LOGADO</Heading>;
 }

@@ -3,7 +3,7 @@ const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/api`;
 const gerapi = {
   async mutate(route: string, data: {}, token?: string) {
     if (!Object?.keys(data)?.length) {
-      return;
+      return null;
     }
 
     const targetURL = `${API_URL}/${route?.toLowerCase()}`;

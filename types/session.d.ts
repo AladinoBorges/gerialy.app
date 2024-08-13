@@ -6,8 +6,6 @@ interface LoginPayloadType {
 }
 
 interface LoginResponseType {
-  data: {
-    user: UserType;
-    jwt: string;
-  };
+  user: UserType;
+  jwt: string;
 }

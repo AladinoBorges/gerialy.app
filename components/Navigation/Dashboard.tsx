@@ -18,15 +18,15 @@ export function DashboardNavigation({ children }: BaseComponentPropTypes) {
         </Box>
 
         <HStack>
-          <Link href='dashboard'>
+          <Link href='/applicant/dashboard'>
             <Text>minhas vagas</Text>
           </Link>
 
-          <Link href='dashboard/new'>
+          <Link href='/applicant/dashboard/new'>
             <Text>+ nova análise</Text>
           </Link>
 
-          <Link href='profile'>
+          <Link href='/applicant/profile'>
             <Text>perfil</Text>
           </Link>
         </HStack>

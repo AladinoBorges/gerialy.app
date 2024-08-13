@@ -58,7 +58,7 @@ export const session = {
 
         this.createCookie({ ...user, role }, 'session', jwt);
 
-        return `/${role}/dashboard`;
+        return `/${role}/dashboard/new`;
       });
     } catch (error) {
       console.error(`[SESSION SERVICE] login - an error occured: `, error);

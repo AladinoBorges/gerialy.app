@@ -7,9 +7,10 @@ export function FormControlWithLabel({
   helperText,
   isRequired,
   errorMessage,
+  ...props
 }: PropTypes) {
   return (
-    <FormControl isRequired={isRequired}>
+    <FormControl isRequired={isRequired} {...props}>
       <FormLabel>{label}</FormLabel>
 
       {children}
@@ -28,4 +29,5 @@ interface PropTypes extends BaseComponentPropTypes {
   helperText?: string;
   isRequired?: boolean;
   errorMessage?: string;
+  display?: string;
 }

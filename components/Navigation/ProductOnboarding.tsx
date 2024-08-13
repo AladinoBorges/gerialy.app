@@ -1,14 +1,15 @@
 import { BaseComponentPropTypes } from '@/types/generic';
 import {
+  Box,
   Button,
   ButtonGroup,
   Center,
   Flex,
-  Heading,
   HStack,
   Text,
   useDisclosure,
 } from '@chakra-ui/react';
+import Link from 'next/link';
 import { UserLoginForm } from '../Forms/UserLogin';
 import { GenericModal } from '../Modals/Generic';
 
@@ -18,14 +19,18 @@ export function ProductOnboardingNavigationBar({ children }: BaseComponentPropTy
   return (
     <main>
       <Flex width='100%' minHeight='100vh' direction='column' gap='4rem'>
-        <HStack padding='0.75rem 2rem' borderBottom='1px solid gray' justify='space-between'>
-          <Heading>geria beta</Heading>
+        <HStack padding='0.75rem 4rem' borderBottom='1px solid gray' justify='space-between'>
+          <Box>
+            <Link href='/'>
+              <Text>geria beta</Text>
+            </Link>
+          </Box>
 
-          <HStack>
+          {/* <HStack>
             <Text>produto</Text>
             <Text>preço</Text>
             <Text>sobre</Text>
-          </HStack>
+          </HStack> */}
 
           <ButtonGroup>
             <Button onClick={loginModalDislosures?.onOpen}>entrar</Button>

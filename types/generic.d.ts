@@ -8,4 +8,4 @@ export interface BaseComponentPropTypes {
 
 export type FormInputEventType = FormEvent<HTMLInputElement>;
 
-export type FormChangeEventHandlerType = ChangeEventHandler<HTMLInputElement>;
+export type FormChangeEventHandlerType = ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;

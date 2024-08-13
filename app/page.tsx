@@ -1,7 +1,7 @@
 'use client';
 
-import { ProductOnboardingNavigationBar } from '@/components/Navigation/ProductOnboardingNavigationBar';
+import { ProductOnboardingNavigationBar } from '@/components/Navigation/ProductOnboarding';
 
 export default function Home() {
-  return <ProductOnboardingNavigationBar />;
+  return <ProductOnboardingNavigationBar>HOMEPAGE</ProductOnboardingNavigationBar>;
 }

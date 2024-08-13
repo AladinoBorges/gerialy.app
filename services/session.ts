@@ -24,6 +24,12 @@ export const session = {
     handleSetCookie(key, data, expiresAt);
   },
 
+  async getCookie(key: string, context = undefined) {
+    const targetCookie = nookies.get(context)[`ger.ia.${key}`];
+
+    return secrets.verify(targetCookie);
+  },
+
   async updateCookie(key: string, context = undefined) {
     const oldCookie = nookies.get(context)?.value;
     const payload = await secrets.verify(oldCookie);
@@ -50,7 +56,7 @@ export const session = {
           return;
         }
 
-        this.createCookie(user, 'session', jwt);
+        this.createCookie({ ...user, role }, 'session', jwt);
 
         return `/${role}/dashboard`;
       });

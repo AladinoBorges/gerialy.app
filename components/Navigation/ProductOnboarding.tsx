@@ -1,7 +1,18 @@
 import { BaseComponentPropTypes } from '@/types/generic';
-import { Button, ButtonGroup, Center, Flex, Heading, HStack, Text } from '@chakra-ui/react';
+import {
+  Button,
+  ButtonGroup,
+  Center,
+  Flex,
+  Heading,
+  HStack,
+  Text,
+  useDisclosure,
+} from '@chakra-ui/react';
 
 export function ProductOnboardingNavigationBar({ children }: BaseComponentPropTypes) {
+  const loginModalDislosures = useDisclosure();
+
   return (
     <main>
       <Flex width='100%' minHeight='100vh' direction='column' gap='4rem'>
@@ -15,7 +26,7 @@ export function ProductOnboardingNavigationBar({ children }: BaseComponentPropTy
           </HStack>
 
           <ButtonGroup>
-            <Button>entrar</Button>
+            <Button onClick={loginModalDislosures?.onOpen}>entrar</Button>
 
             <Button isDisabled variant='outline'>
               registrar

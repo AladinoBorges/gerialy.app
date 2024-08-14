@@ -10,18 +10,17 @@ export enum ApplicationStatusEnum {
 
 export interface ProcessType {
   stage: string;
-  status: ApplicationStatusEnum;
+  status: ApplicationStatusEnum | null;
 }
 
 export interface ApplicationType {
-  id: IDType;
-  allocation: AllocationType;
-  process: ProcessType[];
+  allocation?: AllocationType;
+  process?: ProcessType[];
   applicant?: ApplicantType;
   wasHired?: boolean;
   salaryExpectation?: number;
   immediateAvailability?: boolean;
-  applicantName: string;
+  applicantName?: string;
   automatedAnalysisFromIA?: string;
   analysedByIAa?: boolean;
   analysisDate?: Date;

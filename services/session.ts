@@ -1,10 +1,11 @@
 import { LoginPayloadType, LoginResponseType } from '@/types/session';
 import { UserType } from '@/types/user';
 import nookies from 'nookies';
+import { calculator } from './calculator';
 import gerapi from './geriapi';
 import secrets from './secrets';
 
-const SEVEN_DAYS = 7 * 24 * 60 * 60 * 1000;
+const DAYS_TO_ADD = 7;
 
 function handleSetCookie(key: string, data: string, expiresAt: Date) {
   nookies.set(undefined, `ger.ia.${key}`, data, {
@@ -18,7 +19,7 @@ function handleSetCookie(key: string, data: string, expiresAt: Date) {
 
 export const session = {
   async createCookie(user: UserType, key: string, token: string) {
-    const expiresAt = new Date(Date.now() + SEVEN_DAYS);
+    const expiresAt = calculator.addDays(DAYS_TO_ADD, new Date());
     const data = await secrets.encrypt({ user, expiresAt, token });
 
     handleSetCookie(key, data, expiresAt);
@@ -38,7 +39,7 @@ export const session = {
       return null;
     }
 
-    const expiresAt = new Date(Date.now() + SEVEN_DAYS);
+    const expiresAt = calculator.addDays(DAYS_TO_ADD, new Date());
 
     handleSetCookie(key, oldCookie, expiresAt);
   },

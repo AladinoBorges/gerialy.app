@@ -1,13 +1,13 @@
 import { calculator } from '@/services/calculator';
 import gerapi from '@/services/geriapi';
-import { AllocationStatusEnum, AllocationType } from '@/types/allocation';
+import { AllocationType } from '@/types/allocation';
 import { ApplicantType, ReadApplicantType } from '@/types/applicant';
 import { ApplicationType } from '@/types/application';
-import { FormChangeEventHandlerType } from '@/types/generic';
 import { ReadUserType } from '@/types/user';
 import { Box, Button, Flex, Heading, Input, Switch, Textarea, useToast } from '@chakra-ui/react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { FormControlWithLabel } from './ControlWithLabel';
 
 interface PropTypes {
@@ -16,36 +16,27 @@ interface PropTypes {
   userType: ReadApplicantType;
 }
 
-const INITIAL_ALLOCATIOM_VALUE = {
-  applicationURL: '',
-  automaticClosingDate: calculator?.addDays(60, new Date()),
-  description: '',
-  isPublic: false,
-  isRemote: false,
-  name: '',
-  openPositions: 1,
-  status: AllocationStatusEnum.active,
-};
-
 export function AllocationWithApplicationCreationForm({ user, userType, token }: PropTypes) {
   const [isLoading, setIsLoading] = useState(false);
-  const [allocationData, setAllocationData] = useState<AllocationType>(INITIAL_ALLOCATIOM_VALUE);
 
   const toast = useToast();
   const router = useRouter();
 
-  const handleSwitchChange = () => {
-    setAllocationData((previousValues) => ({
-      ...previousValues,
-      isRemote: !previousValues.isRemote,
-    }));
-  };
-
-  const handleInputChange: FormChangeEventHandlerType = (event) => {
-    const { name, value } = event.currentTarget;
-
-    setAllocationData((previousValues) => ({ ...previousValues, [name]: value }));
-  };
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<AllocationType>({
+    defaultValues: {
+      applicationURL: '',
+      automaticClosingDate: calculator?.addDays(60, new Date()),
+      description: '',
+      isPublic: false,
+      isRemote: true,
+      name: 'Des',
+      openPositions: 1,
+    },
+  });
 
   // ? CRUD - start
   const generateArtificialIntelligenceAnalysis = async (
@@ -62,11 +53,11 @@ export function AllocationWithApplicationCreationForm({ user, userType, token }:
   };
   // ? CRUD - end
 
-  const handleSubmission = async () => {
+  const handleSubmission: SubmitHandler<AllocationType> = async (allocation) => {
     try {
       setIsLoading(true);
 
-      const processStages = allocationData?.recruitmentStages;
+      const processStages = allocation?.recruitmentStages;
 
       const applicationData = {
         applicantName: user?.name,
@@ -88,7 +79,7 @@ export function AllocationWithApplicationCreationForm({ user, userType, token }:
       };
 
       const newAnalysis = await generateArtificialIntelligenceAnalysis(
-        allocationData,
+        allocation,
         applicationData,
         applicantData,
       );
@@ -125,64 +116,95 @@ export function AllocationWithApplicationCreationForm({ user, userType, token }:
     <Flex direction='column' gap='2rem' width='100%'>
       <Heading>analisar nova vaga</Heading>
 
-      <Flex width='100%' direction={{ sm: 'column', md: 'row' }} gap='2rem' align='flex-end'>
-        <FormControlWithLabel isRequired label='nome da vaga'>
-          <Input
-            type='text'
-            name='name'
-            value={allocationData.name}
-            onChange={handleInputChange}
-            placeholder='desenvolvedor de parafusos sênior | remoto'
-          />
-        </FormControlWithLabel>
-
-        <Box minWidth='fit-content' maxWidth='40%'>
-          <FormControlWithLabel label='vaga remota?' display='flex'>
-            <Switch
-              name='applicationURL'
-              onChange={handleSwitchChange}
-              isChecked={allocationData.isRemote}
+      <form onSubmit={handleSubmit(handleSubmission)}>
+        <Flex width='100%' gap='2rem' direction='column'>
+          <Flex
+            width='100%'
+            gap={{ base: '0.5rem', md: '2rem' }}
+            direction={{ base: 'column', md: 'row' }}
+            align={{ base: 'flex-start', md: 'flex-end' }}
+          >
+            <Controller
+              name='name'
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <FormControlWithLabel isRequired label='nome da vaga'>
+                  <Input
+                    type='text'
+                    value={value}
+                    onChange={onChange}
+                    placeholder='desenvolvedor de parafusos sênior | remoto'
+                  />
+                </FormControlWithLabel>
+              )}
             />
-          </FormControlWithLabel>
-        </Box>
-      </Flex>
 
-      <FormControlWithLabel isRequired label='descrição'>
-        <Textarea
-          resize='none'
-          height='25rem'
-          name='description'
-          onChange={handleInputChange}
-          value={allocationData.description}
-          placeholder='detalhes sobre a vaga...'
-        />
-      </FormControlWithLabel>
+            <Box minWidth='fit-content' maxWidth='40%'>
+              <Controller
+                name='isRemote'
+                control={control}
+                render={({ field: { onChange, value } }) => (
+                  <FormControlWithLabel label='vaga remota?' display='flex'>
+                    <Switch onChange={onChange} isChecked={value} />
+                  </FormControlWithLabel>
+                )}
+              />
+            </Box>
+          </Flex>
 
-      <Flex width='100%' direction={{ sm: 'column', md: 'row' }} gap='2rem'>
-        <FormControlWithLabel isRequired label='empresa'>
-          <Input
-            type='text'
-            name='company'
-            onChange={handleInputChange}
-            value={allocationData.applicationURL}
-            placeholder='stark industries'
+          <Controller
+            control={control}
+            name='description'
+            render={({ field: { onChange, value } }) => (
+              <FormControlWithLabel isRequired label='descrição'>
+                <Textarea
+                  resize='none'
+                  value={value}
+                  height={{ base: '18rem', md: '25rem' }}
+                  onChange={onChange}
+                  placeholder='detalhes sobre a vaga...'
+                />
+              </FormControlWithLabel>
+            )}
           />
-        </FormControlWithLabel>
 
-        <FormControlWithLabel isRequired label='link de candidaturas'>
-          <Input
-            type='text'
-            name='applicationURL'
-            onChange={handleInputChange}
-            value={allocationData.applicationURL}
-            placeholder='https://vaganova.com/candidar'
-          />
-        </FormControlWithLabel>
-      </Flex>
+          <Flex width='100%' direction={{ base: 'column', md: 'row' }} gap='2rem'>
+            <Controller
+              name='company'
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <FormControlWithLabel isRequired label='empresa'>
+                  <Input
+                    type='text'
+                    value={value}
+                    onChange={onChange}
+                    placeholder='stark industries'
+                  />
+                </FormControlWithLabel>
+              )}
+            />
 
-      <Button isLoading={isLoading} onClick={handleSubmission}>
-        analisar
-      </Button>
+            <Controller
+              control={control}
+              name='applicationURL'
+              render={({ field: { onChange, value } }) => (
+                <FormControlWithLabel isRequired label='link de candidaturas'>
+                  <Input
+                    type='text'
+                    value={value}
+                    onChange={onChange}
+                    placeholder='https://vaganova.com/candidar'
+                  />
+                </FormControlWithLabel>
+              )}
+            />
+          </Flex>
+
+          <Button isLoading={isLoading} type='submit' width='100%'>
+            analisar
+          </Button>
+        </Flex>
+      </form>
     </Flex>
   );
 }

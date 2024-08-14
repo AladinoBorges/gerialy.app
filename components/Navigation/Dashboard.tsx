@@ -7,9 +7,9 @@ export function DashboardNavigation({ children }: BaseComponentPropTypes) {
     <Flex width='100%' minHeight='100vh' gap='2rem' direction='column'>
       <HStack
         spacing='1rem'
-        padding='1.25rem 4rem'
         justify='space-between'
         borderBottom='1px solid gray'
+        padding={{ base: '1.25rem 1rem', md: '1.25rem 4rem' }}
       >
         <Box>
           <Link href='/'>
@@ -32,7 +32,7 @@ export function DashboardNavigation({ children }: BaseComponentPropTypes) {
         </HStack>
       </HStack>
 
-      <Flex width='100%' maxWidth='1440px' marginX='auto' paddingX='4rem'>
+      <Flex width='100%' maxWidth='1440px' marginX='auto' paddingX={{ base: '1rem', md: '4rem' }}>
         {children}
       </Flex>
     </Flex>

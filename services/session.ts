@@ -28,7 +28,13 @@ export const session = {
   async getCookie(key: string, context = undefined) {
     const targetCookie = nookies.get(context)[`ger.ia.${key}`];
 
-    return secrets.verify(targetCookie);
+    if (!targetCookie) {
+      return null;
+    }
+
+    const decryptedCookie = await secrets.verify(targetCookie);
+
+    return decryptedCookie;
   },
 
   async updateCookie(key: string, context = undefined) {

@@ -1,4 +1,4 @@
-import { IDType } from './generic';
+import { IDType } from '../generic';
 
 export interface UserType {
   id: IDType;

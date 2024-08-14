@@ -1,3 +1,5 @@
+import { AllocationType } from '@/types/allocation';
+import { ApplicationType } from '@/types/application';
 import { FormChangeEventHandlerType } from '@/types/generic';
 import { Box, Button, Flex, Heading, Input, Switch, Textarea } from '@chakra-ui/react';
 import { useState } from 'react';
@@ -30,6 +32,12 @@ export function AllocationWithApplicationCreationForm() {
 
     setAllocationData((previousValues) => ({ ...previousValues, [name]: value }));
   };
+
+  // ? CRUD - start
+  const createAllocation = async (data: AllocationType) => {};
+
+  const createA = async (data: ApplicationType) => {};
+  // ? CRUD - end
 
   const handleSubmission = async () => {
     try {

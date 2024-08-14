@@ -11,9 +11,9 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { FormControlWithLabel } from './ControlWithLabel';
 
 interface PropTypes {
-  token: string;
-  user: ReadUserType;
-  userType: ReadApplicantType;
+  token?: string;
+  user?: ReadUserType;
+  userType?: ReadApplicantType;
 }
 
 export function AllocationWithApplicationCreationForm({ user, userType, token }: PropTypes) {

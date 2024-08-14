@@ -10,7 +10,7 @@ export function FormControlWithLabel({
   ...props
 }: PropTypes) {
   return (
-    <FormControl isRequired={isRequired} {...props}>
+    <FormControl isRequired={isRequired} isInvalid={!!errorMessage?.trim()} {...props}>
       <FormLabel>{label}</FormLabel>
 
       {children}

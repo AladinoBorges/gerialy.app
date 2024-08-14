@@ -25,15 +25,15 @@ export function AllocationWithApplicationCreationForm({ user, userType, token }:
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    formState: { errors: formErrors },
   } = useForm<AllocationType>({
     defaultValues: {
       applicationURL: '',
       automaticClosingDate: calculator?.addDays(60, new Date()),
       description: '',
       isPublic: false,
-      isRemote: true,
-      name: 'Des',
+      isRemote: false,
+      name: '',
       openPositions: 1,
     },
   });
@@ -127,8 +127,12 @@ export function AllocationWithApplicationCreationForm({ user, userType, token }:
             <Controller
               name='name'
               control={control}
-              render={({ field: { onChange, value } }) => (
-                <FormControlWithLabel isRequired label='nome da vaga'>
+              render={({ field: { onChange, value, name } }) => (
+                <FormControlWithLabel
+                  isRequired
+                  label='nome da vaga'
+                  errorMessage={formErrors[name]?.message}
+                >
                   <Input
                     type='text'
                     value={value}
@@ -143,8 +147,12 @@ export function AllocationWithApplicationCreationForm({ user, userType, token }:
               <Controller
                 name='isRemote'
                 control={control}
-                render={({ field: { onChange, value } }) => (
-                  <FormControlWithLabel label='vaga remota?' display='flex'>
+                render={({ field: { onChange, value, name } }) => (
+                  <FormControlWithLabel
+                    display='flex'
+                    label='vaga remota?'
+                    errorMessage={formErrors[name]?.message}
+                  >
                     <Switch onChange={onChange} isChecked={value} />
                   </FormControlWithLabel>
                 )}
@@ -155,14 +163,18 @@ export function AllocationWithApplicationCreationForm({ user, userType, token }:
           <Controller
             control={control}
             name='description'
-            render={({ field: { onChange, value } }) => (
-              <FormControlWithLabel isRequired label='descrição'>
+            render={({ field: { onChange, value, name } }) => (
+              <FormControlWithLabel
+                isRequired
+                label='descrição'
+                errorMessage={formErrors[name]?.message}
+              >
                 <Textarea
                   resize='none'
                   value={value}
-                  height={{ base: '18rem', md: '25rem' }}
                   onChange={onChange}
                   placeholder='detalhes sobre a vaga...'
+                  height={{ base: '18rem', md: '25rem' }}
                 />
               </FormControlWithLabel>
             )}
@@ -172,8 +184,12 @@ export function AllocationWithApplicationCreationForm({ user, userType, token }:
             <Controller
               name='company'
               control={control}
-              render={({ field: { onChange, value } }) => (
-                <FormControlWithLabel isRequired label='empresa'>
+              render={({ field: { onChange, value, name } }) => (
+                <FormControlWithLabel
+                  isRequired
+                  label='empresa'
+                  errorMessage={formErrors[name]?.message}
+                >
                   <Input
                     type='text'
                     value={value}
@@ -187,8 +203,12 @@ export function AllocationWithApplicationCreationForm({ user, userType, token }:
             <Controller
               control={control}
               name='applicationURL'
-              render={({ field: { onChange, value } }) => (
-                <FormControlWithLabel isRequired label='link de candidaturas'>
+              render={({ field: { onChange, value, name } }) => (
+                <FormControlWithLabel
+                  isRequired
+                  label='link de candidaturas'
+                  errorMessage={formErrors[name]?.message}
+                >
                   <Input
                     type='text'
                     value={value}

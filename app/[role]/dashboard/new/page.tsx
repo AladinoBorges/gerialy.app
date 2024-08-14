@@ -23,6 +23,8 @@ export default function UserDashboardPage() {
         setCookies(() => ({ user, token }));
       }
     })();
+
+    return () => {};
   }, []);
 
   return (

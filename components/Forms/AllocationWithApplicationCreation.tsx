@@ -51,10 +51,57 @@ export function AllocationWithApplicationCreationForm() {
   const handleSubmission = async () => {
     try {
       setIsLoading(true);
-    const analysis = await gerapi.mutate(API_URL, MUTATION_DATA, token);
 
-    return analysis;
-  };
+      const processStages = allocationData?.recruitmentStages;
+
+      const applicationData = {
+        applicantName: user?.name,
+        applicantEmail: user?.email,
+        analysisDate: new Date(),
+        ...(!!processStages?.length
+          ? {
+              process: processStages?.map((stageItem) => {
+                return { stage: stageItem?.name, status: null };
+              }),
+            }
+          : {}),
+      };
+
+      const applicantData = {
+        user: user?.id,
+        name: user?.name,
+        email: user?.email,
+      };
+
+      const newAnalysis = await generateArtificialIntelligenceAnalysis(
+        allocationData,
+        applicationData,
+        applicantData,
+      );
+
+      if (newAnalysis?.id) {
+        router.push(`/dashboard/analysis/${newAnalysis?.id}`);
+
+        return;
+      }
+
+      toast({
+        duration: 5000,
+        status: 'error',
+        isClosable: true,
+        title: 'Erro ao analizar a sua candidatura.',
+        description: 'Os dados foram guardados, tente analisar novamente mais tarde.',
+      });
+    } catch (error) {
+      console.error('[ALLOCATION WITH APPLICATION CREATION]: handleSubmission ', error);
+
+      toast({
+        duration: 5000,
+        status: 'error',
+        isClosable: true,
+        title: 'Aconteceu um erro no nosso servidor.',
+        description: 'Tente analisar novamente mais tarde.',
+      });
     } finally {
       setIsLoading(false);
     }

@@ -1,4 +1,4 @@
-import { UserType } from './user';
+import { UserType } from './crud/user';
 
 interface LoginPayloadType {
   identifier: string;

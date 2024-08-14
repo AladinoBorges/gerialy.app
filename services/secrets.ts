@@ -1,3 +1,4 @@
+import { ReadUserType } from '@/types/user';
 import { JWTPayload, jwtVerify, SignJWT } from 'jose';
 
 const SECRET_KEY = process.env.NEXT_PUBLIC_SESSION_SECRET;
@@ -14,9 +15,13 @@ const secrets = {
 
   async verify(session: string = '') {
     try {
+      if (!session) {
+        return null;
+      }
+
       const { payload } = await jwtVerify(session, ENCODED_SECRET_KEY, { algorithms: ['HS256'] });
 
-      return payload;
+      return payload as VerifyedPayloadType;
     } catch (error) {
       console.error(`[SECRETS SERVICE] verify - failed to verify session: ${error}`);
 
@@ -26,3 +31,8 @@ const secrets = {
 };
 
 export default secrets;
+
+interface VerifyedPayloadType extends JWTPayload {
+  user: ReadUserType;
+  token: string;
+}

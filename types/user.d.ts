@@ -1,10 +1,14 @@
-import { IDType } from './generic';
+import { IDType } from '../generic';
 
 export interface UserType {
-  id: IDType;
   blocked?: boolean;
   confirmed?: boolean;
   email: string;
   role: string;
   username?: string;
+  name?: string;
+}
+
+export interface ReadUserType extends UserType {
+  id: IDType;
 }

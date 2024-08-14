@@ -1,24 +1,38 @@
-import { AllocationType } from '@/types/allocation';
+import { calculator } from '@/services/calculator';
+import gerapi from '@/services/geriapi';
+import { AllocationStatusEnum, AllocationType } from '@/types/allocation';
+import { ApplicantType, ReadApplicantType } from '@/types/applicant';
 import { ApplicationType } from '@/types/application';
 import { FormChangeEventHandlerType } from '@/types/generic';
-import { Box, Button, Flex, Heading, Input, Switch, Textarea } from '@chakra-ui/react';
+import { ReadUserType } from '@/types/user';
+import { Box, Button, Flex, Heading, Input, Switch, Textarea, useToast } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { FormControlWithLabel } from './ControlWithLabel';
 
+interface PropTypes {
+  token: string;
+  user: ReadUserType;
+  userType: ReadApplicantType;
+}
+
 const INITIAL_ALLOCATIOM_VALUE = {
-  name: '',
-  isPublic: false,
   applicationURL: '',
-  openPositions: 1,
-  status: 'active',
-  isRemote: false,
+  automaticClosingDate: calculator?.addDays(60, new Date()),
   description: '',
+  isPublic: false,
+  isRemote: false,
+  name: '',
+  openPositions: 1,
+  status: AllocationStatusEnum.active,
 };
 
-export function AllocationWithApplicationCreationForm() {
+export function AllocationWithApplicationCreationForm({ user, userType, token }: PropTypes) {
   const [isLoading, setIsLoading] = useState(false);
-  const [applicationData, setApplicationData] = useState<{}>({});
-  const [allocationData, setAllocationData] = useState(INITIAL_ALLOCATIOM_VALUE);
+  const [allocationData, setAllocationData] = useState<AllocationType>(INITIAL_ALLOCATIOM_VALUE);
+
+  const toast = useToast();
+  const router = useRouter();
 
   const handleSwitchChange = () => {
     setAllocationData((previousValues) => ({

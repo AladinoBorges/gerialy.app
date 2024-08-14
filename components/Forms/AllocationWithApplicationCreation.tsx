@@ -34,15 +34,27 @@ export function AllocationWithApplicationCreationForm() {
   };
 
   // ? CRUD - start
-  const createAllocation = async (data: AllocationType) => {};
+  const generateArtificialIntelligenceAnalysis = async (
+    allocation: AllocationType,
+    application: ApplicationType,
+    applicant: ApplicantType | null,
+  ) => {
+    const API_URL = `${process.env.NEXT_PUBLIC_API_ULR}/api/analysis`;
+    const MUTATION_DATA = { allocation, application, applicant, creator: user };
 
-  const createA = async (data: ApplicationType) => {};
+    const analysis = await gerapi.mutate(API_URL, MUTATION_DATA, token);
+
+    return analysis;
+  };
   // ? CRUD - end
 
   const handleSubmission = async () => {
     try {
       setIsLoading(true);
-    } catch (error) {
+    const analysis = await gerapi.mutate(API_URL, MUTATION_DATA, token);
+
+    return analysis;
+  };
     } finally {
       setIsLoading(false);
     }

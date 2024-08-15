@@ -1,9 +1,10 @@
 import { session } from '@/services/session';
 import { BaseComponentPropTypes } from '@/types/generic';
-import { Box, Button, ButtonGroup, Flex, HStack, Text, useDisclosure } from '@chakra-ui/react';
+import { Button, ButtonGroup, Flex, HStack, Text, useDisclosure } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { ClickableLogo } from '../Branding/ClickableLogo';
 import { GenericModal } from '../Modals/Generic';
 
 export function DashboardNavigation({ children }: BaseComponentPropTypes) {
@@ -32,11 +33,7 @@ export function DashboardNavigation({ children }: BaseComponentPropTypes) {
         borderBottom='1px solid gray'
         padding={{ base: '1.25rem 1rem', md: '1.25rem 4rem' }}
       >
-        <Box>
-          <Link href='/'>
-            <Text>geria beta</Text>
-          </Link>
-        </Box>
+        <ClickableLogo />
 
         <HStack>
           <Link href='/applicant/dashboard'>

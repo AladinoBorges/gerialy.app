@@ -3,15 +3,14 @@ import { Box, Button, chakra, Flex, Icon, Stack } from '@chakra-ui/react';
 export function CoreAppFeatures() {
   return (
     <Flex
-      gap='3rem'
+      gap='2.5rem'
       rounded='xl'
-      bg='#edf3f8'
       width='auto'
-      padding={20}
+      padding={{ base: 4, md: 20 }}
       direction='column'
       alignItems='center'
       justifyContent='center'
-      backgroundColor='gray.50'
+      backgroundColor='#edf3f8'
       _dark={{ backgroundColor: '#3e3e3e' }}
     >
       <Box
@@ -58,9 +57,9 @@ export function CoreAppFeatures() {
 
           <Box marginTop={16}>
             <Stack
+              display='grid'
               gridRowGap={{ md: 10 }}
-              display={{ md: 'grid' }}
-              gridColumnGap={{ md: 8 }}
+              gridColumnGap={{ md: 5 }}
               spacing={{ base: 10, md: 0 }}
               gridTemplateColumns={{ md: 'repeat(2,1fr)' }}
             >
@@ -93,10 +92,9 @@ export function CoreAppFeatures() {
                 }
               >
                 imagine um recrutamento onde cada currículo recebe a atenção que merece, sem
-                sobrecargas para si, com a <strong>geria</strong>, a inteligência artificial não
-                apenas automatiza, mas também humaniza. nós cuidamos da triagem, da análise e da
-                precisão, para que você foque no que realmente importa: encontrar a conexão
-                perfeita.
+                sobrecargas para si. a nossa inteligência artificial não apenas automatiza, mas
+                também humaniza. nós cuidamos da triagem, da análise e da precisão, para que você
+                foque no que realmente importa: encontrar a conexão perfeita.
               </FeatureCard>
 
               <FeatureCard
@@ -117,7 +115,7 @@ export function CoreAppFeatures() {
               </FeatureCard>
 
               <FeatureCard
-                title='você só paga enquanto usar'
+                title='preços que cabem no seu bolso'
                 icon={
                   <path
                     strokeLinecap='round'
@@ -127,8 +125,10 @@ export function CoreAppFeatures() {
                   />
                 }
               >
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit
-                perferendis suscipit eaque, iste dolor cupiditate blanditiis ratione.
+                não importa se você é um candidato em busca de colocação profissional, um recrutador
+                experiente que gere dezenas de vagas ou uma empresa que recruta milhares de
+                candidatos por mês. temos a solução de preços ideal para si, desde sistemas de
+                crédito até licenças de uso anuais.
               </FeatureCard>
             </Stack>
           </Box>
@@ -140,6 +140,7 @@ export function CoreAppFeatures() {
           as='a'
           size='lg'
           isDisabled
+          width='full'
           variant='solid'
           cursor='pointer'
           alignItems='center'
@@ -147,7 +148,6 @@ export function CoreAppFeatures() {
           colorScheme='twitter'
           justifyContent='center'
           marginBottom={{ base: 2, sm: 0 }}
-          width={{ base: 'full', sm: 'auto', md: 'full' }}
         >
           experimente agora
           <Icon boxSize={4} ml={1} viewBox='0 0 20 20' fill='currentColor'>

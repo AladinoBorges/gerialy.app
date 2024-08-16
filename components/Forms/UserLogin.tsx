@@ -1,7 +1,7 @@
 import { session } from '@/services/session';
 import { FormChangeEventHandlerType } from '@/types/generic';
 import { LoginPayloadType } from '@/types/session';
-import { Button, Input } from '@chakra-ui/react';
+import { Button, Flex, Input } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
 import { MouseEventHandler, useState } from 'react';
 import { FormControlWithLabel } from './ControlWithLabel';
@@ -40,29 +40,31 @@ export function UserLoginForm({ role }: PropTypes) {
 
   return (
     <form>
-      <FormControlWithLabel isRequired label='email'>
-        <Input
-          type='email'
-          name='identifier'
-          value={formData.identifier}
-          onChange={handleInputChange}
-          placeholder='meuemail@google.com'
-        />
-      </FormControlWithLabel>
+      <Flex direction='column' width='100%' gap='1.5rem' padding='4rem 0.5rem'>
+        <FormControlWithLabel isRequired label='email'>
+          <Input
+            type='email'
+            name='identifier'
+            value={formData.identifier}
+            onChange={handleInputChange}
+            placeholder='meuemail@google.com'
+          />
+        </FormControlWithLabel>
 
-      <FormControlWithLabel isRequired label='senha'>
-        <Input
-          type='password'
-          name='password'
-          placeholder='**********'
-          value={formData.password}
-          onChange={handleInputChange}
-        />
-      </FormControlWithLabel>
+        <FormControlWithLabel isRequired label='senha'>
+          <Input
+            type='password'
+            name='password'
+            placeholder='**********'
+            value={formData.password}
+            onChange={handleInputChange}
+          />
+        </FormControlWithLabel>
 
-      <Button isLoading={isLoading} onClick={handleUserLogin}>
-        iniciar sessão
-      </Button>
+        <Button isLoading={isLoading} onClick={handleUserLogin}>
+          iniciar sessão
+        </Button>
+      </Flex>
     </form>
   );
 }

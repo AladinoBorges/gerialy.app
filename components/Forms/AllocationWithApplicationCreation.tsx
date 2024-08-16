@@ -44,7 +44,7 @@ export function AllocationWithApplicationCreationForm({ user, userType, token }:
     application: ApplicationType,
     applicant: ApplicantType | null,
   ) => {
-    const API_URL = `${process.env.NEXT_PUBLIC_API_ULR}/api/analysis`;
+    const API_URL = `${process.env.NEXT_PUBLIC_API_ULR}/api/application/ia`;
     const MUTATION_DATA = { allocation, application, applicant, creator: user };
 
     const analysis = await gerapi.mutate(API_URL, MUTATION_DATA, token);
@@ -85,7 +85,7 @@ export function AllocationWithApplicationCreationForm({ user, userType, token }:
       );
 
       if (newAnalysis?.id) {
-        router.push(`/dashboard/analysis/${newAnalysis?.id}`);
+        router.push(`/dashboard/application/${newAnalysis?.id}`);
 
         return;
       }

@@ -1,11 +1,14 @@
 import { session } from '@/services/session';
 import { BaseComponentPropTypes } from '@/types/generic';
-import { Box, Button, ButtonGroup, Flex, HStack, Text, useDisclosure } from '@chakra-ui/react';
+import { Button, ButtonGroup, Flex, HStack, Text, useDisclosure } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { ClickableLogo } from '../Branding/ClickableLogo';
 import { GenericModal } from '../Modals/Generic';
 
 export function DashboardNavigation({ children }: BaseComponentPropTypes) {
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   const logoutDisclosures = useDisclosure();
@@ -15,6 +18,8 @@ export function DashboardNavigation({ children }: BaseComponentPropTypes) {
   };
 
   const handleLogout = async () => {
+    setIsLoading(true);
+
     await session.eraseCookie('session');
 
     router.push('/');
@@ -28,11 +33,7 @@ export function DashboardNavigation({ children }: BaseComponentPropTypes) {
         borderBottom='1px solid gray'
         padding={{ base: '1.25rem 1rem', md: '1.25rem 4rem' }}
       >
-        <Box>
-          <Link href='/'>
-            <Text>geria beta</Text>
-          </Link>
-        </Box>
+        <ClickableLogo />
 
         <HStack>
           <Link href='/applicant/dashboard'>
@@ -64,9 +65,11 @@ export function DashboardNavigation({ children }: BaseComponentPropTypes) {
           onClose={logoutDisclosures?.onClose}
         >
           <ButtonGroup>
-            <Button onClick={handleLogout}>sim</Button>
+            <Button isLoading={isLoading} onClick={handleLogout}>
+              sim
+            </Button>
 
-            <Button variant='outline' onClick={logoutDisclosures?.onClose}>
+            <Button isLoading={isLoading} variant='outline' onClick={logoutDisclosures?.onClose}>
               não
             </Button>
           </ButtonGroup>

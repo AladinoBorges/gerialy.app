@@ -1,11 +1,12 @@
 'use client';
 
+import { IDType } from '@/types/generic';
 import { Flex } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import gerapi from '../../../../../services/geriapi';
 import { session } from '../../../../../services/session';
 
-export default function AnalysisResumePage({ params: { id } }) {
+export default function AnalysisResumePage({ params: { id } }: PropTypes) {
   const [sessionToken, setSessionToken] = useState<string | null>(null);
 
   const getApplication = async (id: string | number, token: string) => {
@@ -29,4 +30,10 @@ export default function AnalysisResumePage({ params: { id } }) {
   }, []);
 
   return <Flex>RESUMO DA ANÁLISE DA CANDIDATURA</Flex>;
+}
+
+interface PropTypes {
+  params: {
+    id: IDType;
+  };
 }

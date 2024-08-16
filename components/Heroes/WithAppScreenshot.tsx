@@ -1,6 +1,6 @@
 import { Box, Button, chakra, Icon, Image, Stack, Text } from '@chakra-ui/react';
 
-export function HeroHeaderWithAppScreenshot({}) {
+export function HeroHeaderWithAppScreenshot() {
   return (
     <Box paddingX={{ base: 0, md: 8 }} paddingY={24} marginX='auto'>
       <Box
@@ -26,7 +26,7 @@ export function HeroHeaderWithAppScreenshot({}) {
             display={{ base: 'block', lg: 'inline' }}
             bgGradient='linear(to-r, gray.400,blue.500)'
           >
-            p'ra quem gere
+            {"p'ra quem gere"}
           </Text>
           <Text>e quem busca.</Text>
         </chakra.h1>
@@ -51,6 +51,7 @@ export function HeroHeaderWithAppScreenshot({}) {
           <Button
             as='a'
             size='lg'
+            isDisabled
             variant='solid'
             cursor='pointer'
             alignItems='center'

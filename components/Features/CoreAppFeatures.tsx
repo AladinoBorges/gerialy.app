@@ -1,3 +1,4 @@
+import { BaseComponentPropTypes } from '@/types/generic';
 import { Box, Button, chakra, Flex, Icon, Stack } from '@chakra-ui/react';
 
 export function CoreAppFeatures() {
@@ -163,7 +164,12 @@ export function CoreAppFeatures() {
   );
 }
 
-function FeatureCard(props) {
+interface CardPropTypes extends BaseComponentPropTypes {
+  title: string;
+  icon: JSX.Element;
+}
+
+function FeatureCard({ title, children, icon }: CardPropTypes) {
   return (
     <Flex>
       <Flex shrink={0}>
@@ -183,30 +189,18 @@ function FeatureCard(props) {
             viewBox='0 0 24 24'
             stroke='currentColor'
           >
-            {props.icon}
+            {icon}
           </Icon>
         </Flex>
       </Flex>
 
-      <Box ml={4}>
-        <chakra.dt
-          fontSize='lg'
-          fontWeight='medium'
-          lineHeight='6'
-          _light={{
-            color: 'gray.900',
-          }}
-        >
-          {props.title}
+      <Box marginLeft={4}>
+        <chakra.dt fontSize='lg' lineHeight='6' fontWeight='medium' _light={{ color: 'gray.900' }}>
+          {title}
         </chakra.dt>
-        <chakra.dd
-          mt={2}
-          color='gray.500'
-          _dark={{
-            color: 'gray.400',
-          }}
-        >
-          {props.children}
+
+        <chakra.dd marginTop={2} color='gray.500' _dark={{ color: 'gray.400' }}>
+          {children}
         </chakra.dd>
       </Box>
     </Flex>

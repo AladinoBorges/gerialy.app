@@ -14,10 +14,10 @@ export function HeroHeaderWithAppScreenshot({}) {
           fontWeight='bold'
           lineHeight='none'
           _dark={{ color: 'gray.100' }}
-          fontSize={{ base: '3xl', md: '7xl' }}
+          fontSize={{ base: '4xl', md: '7xl' }}
           letterSpacing={{ base: 'normal', md: 'tight' }}
         >
-          todas as suas
+          inteligência
           <br />
           <Text
             width='full'
@@ -26,9 +26,9 @@ export function HeroHeaderWithAppScreenshot({}) {
             display={{ base: 'block', lg: 'inline' }}
             bgGradient='linear(to-r, gray.400,blue.500)'
           >
-            candidaturas e vagas
+            p'ra quem gere
           </Text>
-          <Text>geridas num só lugar.</Text>
+          <Text>e quem busca.</Text>
         </chakra.h1>
 
         <chakra.p
@@ -38,8 +38,8 @@ export function HeroHeaderWithAppScreenshot({}) {
           paddingX={{ base: 0, lg: 24 }}
           fontSize={{ base: 'lg', md: 'xl' }}
         >
-          geria é um software que utiliza inteligência artificial para analisar a compatibilidade
-          entre candidatos e vagas em segundos.
+          com a inteligência ágil da <strong>geria</strong>, as vagas encontram os talentos certos,
+          enquanto os currículos ganham o destaque que merecem, em questão de segundos.
         </chakra.p>
 
         <Stack
@@ -60,7 +60,7 @@ export function HeroHeaderWithAppScreenshot({}) {
             marginBottom={{ base: 2, sm: 0 }}
             width={{ base: 'full', sm: 'auto' }}
           >
-            começar a usar
+            experimente agora
             <Icon boxSize={4} ml={1} viewBox='0 0 20 20' fill='currentColor'>
               <path
                 fillRule='evenodd'
@@ -95,19 +95,11 @@ export function HeroHeaderWithAppScreenshot({}) {
         </Stack>
       </Box>
 
-      <Box
-        width={{
-          base: 'full',
-          md: 10 / 12,
-        }}
-        marginX='auto'
-        mt={20}
-        textAlign='center'
-      >
+      <Box mt={20} marginX='auto' textAlign='center' width={{ base: 'full', md: 10 / 12 }}>
         <Image
           width='full'
           rounded='lg'
-          shadowidth='2xl'
+          boxShadow='2xl'
           src='/geria_allocation_analysis_page.png'
           alt='Hellonext feedback boards software screenshot'
         />

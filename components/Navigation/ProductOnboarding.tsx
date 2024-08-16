@@ -41,9 +41,9 @@ export function ProductOnboardingNavigationBar({ children }: BaseComponentPropTy
         <GenericModal
           isOpen={loginModalDislosures.isOpen}
           onClose={loginModalDislosures.onClose}
-          title='entrar'
+          title=''
         >
-          <UserLoginForm role='applicant' />
+          <UserLoginForm />
         </GenericModal>
       </Flex>
     </main>

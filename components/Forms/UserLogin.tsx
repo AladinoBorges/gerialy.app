@@ -8,7 +8,7 @@ import { FormControlWithLabel } from './ControlWithLabel';
 
 const FORM_INITIAL_VALUES = { identifier: '', password: '' };
 
-export function UserLoginForm({ role }: PropTypes) {
+export function UserLoginForm() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [formData, setFormData] = useState<LoginPayloadType>(FORM_INITIAL_VALUES);
 
@@ -24,7 +24,7 @@ export function UserLoginForm({ role }: PropTypes) {
     try {
       setIsLoading(true);
 
-      const redirectURL = await session.login(formData, role);
+      const redirectURL = await session.login(formData);
 
       if (!redirectURL) {
         return;

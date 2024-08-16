@@ -56,19 +56,30 @@ export const session = {
     return true;
   },
 
-  async login(payload: LoginPayloadType, role: string) {
+  async login(payload: LoginPayloadType) {
     try {
-      return gerapi.mutate('auth/local', payload)?.then((response: LoginResponseType) => {
-        const { user, jwt } = response;
+      return gerapi
+        .mutate('auth/local?populate=role', payload)
+        ?.then(async (response: LoginResponseType) => {
+          const { user, jwt } = response;
 
-        if (!jwt) {
+          if (!jwt) {
+            return;
+          }
+
+          const fullUser = await gerapi.get('users/me?populate=role', jwt);
+
+          if (!!fullUser?.id) {
+            const { role = null, ...restOfFullUser } = fullUser;
+            const userRole = role?.name || 'applicant';
+
+            this.createCookie({ ...user, role: role?.name || 'applicant' }, 'session', jwt);
+
+            return `/${userRole}/dashboard/new`;
+          }
+
           return;
-        }
-
-        this.createCookie({ ...user, role }, 'session', jwt);
-
-        return `/${role}/dashboard/new`;
-      });
+        });
     } catch (error) {
       console.error(`[SESSION SERVICE] login - an error occured: `, error);
     }

@@ -2,7 +2,7 @@ import { Box, Button, chakra, Icon, Image, Stack, Text } from '@chakra-ui/react'
 
 export function HeroHeaderWithAppScreenshot({}) {
   return (
-    <Box paddingX={8} py={24} marginX='auto'>
+    <Box paddingX={{ base: 0, md: 8 }} paddingY={24} marginX='auto'>
       <Box
         marginX='auto'
         textAlign={{ base: 'left', md: 'center' }}
@@ -14,7 +14,7 @@ export function HeroHeaderWithAppScreenshot({}) {
           fontWeight='bold'
           lineHeight='none'
           _dark={{ color: 'gray.100' }}
-          fontSize={{ base: '4xl', md: '7xl' }}
+          fontSize={{ base: '3xl', md: '7xl' }}
           letterSpacing={{ base: 'normal', md: 'tight' }}
         >
           todas as suas
@@ -73,6 +73,7 @@ export function HeroHeaderWithAppScreenshot({}) {
           <Button
             as='a'
             size='lg'
+            isDisabled
             cursor='pointer'
             variant='outline'
             colorScheme='gray'

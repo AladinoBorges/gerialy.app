@@ -1,5 +1,5 @@
 import { AllocationType } from './allocation';
-import { ApplicantType } from './applicant';
+import { ReadApplicantType } from './applicant';
 import { IDType } from './generic';
 
 export enum ApplicationStatusEnum {
@@ -16,7 +16,7 @@ export interface ProcessType {
 export interface ApplicationType {
   allocation?: AllocationType;
   process?: ProcessType[];
-  applicant?: ApplicantType;
+  applicant?: IDType | ReadApplicantType;
   wasHired?: boolean;
   salaryExpectation?: number;
   immediateAvailability?: boolean;

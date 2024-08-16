@@ -1,7 +1,7 @@
 import { calculator } from '@/services/calculator';
 import gerapi from '@/services/geriapi';
 import { AllocationType } from '@/types/allocation';
-import { ApplicantType, ReadApplicantType } from '@/types/applicant';
+import { ReadApplicantType } from '@/types/applicant';
 import { ApplicationType } from '@/types/application';
 import { ReadUserType } from '@/types/user';
 import { Box, Button, Flex, Heading, Input, Switch, Textarea, useToast } from '@chakra-ui/react';
@@ -13,10 +13,10 @@ import { FormControlWithLabel } from './ControlWithLabel';
 interface PropTypes {
   token?: string;
   user?: ReadUserType;
-  userType?: ReadApplicantType;
+  applicant?: ReadApplicantType;
 }
 
-export function AllocationWithApplicationCreationForm({ user, userType, token }: PropTypes) {
+export function AllocationWithApplicationCreationForm({ user, applicant, token }: PropTypes) {
   const [isLoading, setIsLoading] = useState(false);
 
   const toast = useToast();
@@ -42,14 +42,28 @@ export function AllocationWithApplicationCreationForm({ user, userType, token }:
   const generateArtificialIntelligenceAnalysis = async (
     allocation: AllocationType,
     application: ApplicationType,
-    applicant: ApplicantType | null,
   ) => {
-    const API_URL = `${process.env.NEXT_PUBLIC_API_ULR}/api/gia/application-analysis`;
-    const MUTATION_DATA = { allocation, application, applicant, creator: user };
+    const BASE_API_URL = `${process.env.NEXT_PUBLIC_API_ULR}/api`;
+    const ALLOCATION_ENDPOINT = `${BASE_API_URL}/allocation`;
+    const APPLICATION_ANALYSIS_ENDPOINT = `${BASE_API_URL}//gia/application-analysis`;
 
-    const analysis = await gerapi.mutate(API_URL, MUTATION_DATA, token);
+    const newAllocation = await gerapi.mutate(
+      ALLOCATION_ENDPOINT,
+      { ...allocation, creator: user?.id },
+      token,
+    );
 
-    return analysis;
+    let newAnalysis = null;
+
+    if (!!newAllocation?.id) {
+      newAnalysis = await gerapi.mutate(
+        APPLICATION_ANALYSIS_ENDPOINT,
+        { ...application, allocation: newAllocation?.id },
+        token,
+      );
+    }
+
+    return newAnalysis;
   };
   // ? CRUD - end
 
@@ -62,6 +76,7 @@ export function AllocationWithApplicationCreationForm({ user, userType, token }:
       const applicationData = {
         applicantName: user?.name,
         applicantEmail: user?.email,
+        applicant: applicant?.id,
         analysisDate: new Date(),
         ...(!!processStages?.length
           ? {
@@ -72,17 +87,7 @@ export function AllocationWithApplicationCreationForm({ user, userType, token }:
           : {}),
       };
 
-      const applicantData = {
-        user: user?.id,
-        name: user?.name,
-        email: user?.email,
-      };
-
-      const newAnalysis = await generateArtificialIntelligenceAnalysis(
-        allocation,
-        applicationData,
-        applicantData,
-      );
+      const newAnalysis = await generateArtificialIntelligenceAnalysis(allocation, applicationData);
 
       if (newAnalysis?.id) {
         router.push(`/dashboard/application/${newAnalysis?.id}`);

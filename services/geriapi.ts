@@ -1,6 +1,6 @@
 const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/api`;
 
-const gerapi = {
+const geriapi = {
   async mutate(route: string, data: {}, token?: string) {
     if (!Object?.keys(data)?.length) {
       return null;
@@ -10,7 +10,7 @@ const gerapi = {
 
     const result = await fetch(targetURL, {
       method: 'POST',
-      body: JSON.stringify(data),
+      body: JSON.stringify({ data }),
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json; charset=UTF-8',
@@ -26,7 +26,7 @@ const gerapi = {
       })
       ?.catch((error) => ({ error }));
 
-    return result;
+    return result?.data;
   },
 
   async get(route: string, token?: string) {
@@ -49,8 +49,8 @@ const gerapi = {
       })
       ?.catch((error) => ({ error }));
 
-    return result;
+    return result?.data;
   },
 };
 
-export default gerapi;
+export default geriapi;

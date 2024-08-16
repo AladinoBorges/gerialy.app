@@ -6,4 +6,5 @@ export interface InternalCurriculumType {
   applicant: ApplicantType;
   name: string;
   isActive?: boolean;
+  content: string;
 }

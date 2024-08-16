@@ -1,8 +1,10 @@
 import { calculator } from '@/services/calculator';
-import gerapi from '@/services/geriapi';
+import geriapi from '@/services/geriapi';
+import { openAIMessages } from '@/services/gia';
 import { AllocationType } from '@/types/allocation';
 import { ReadApplicantType } from '@/types/applicant';
 import { ApplicationType } from '@/types/application';
+import { ArtificialIntelligencePromptType } from '@/types/gia';
 import { ReadUserType } from '@/types/user';
 import { Box, Button, Flex, Heading, Input, Switch, Textarea, useToast } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
@@ -42,12 +44,12 @@ export function AllocationWithApplicationCreationForm({ user, applicant, token }
   const generateArtificialIntelligenceAnalysis = async (
     allocation: AllocationType,
     application: ApplicationType,
+    artificialIntelligencePrompt: ArtificialIntelligencePromptType[],
   ) => {
-    const BASE_API_URL = `${process.env.NEXT_PUBLIC_API_ULR}/api`;
-    const ALLOCATION_ENDPOINT = `${BASE_API_URL}/allocation`;
-    const APPLICATION_ANALYSIS_ENDPOINT = `${BASE_API_URL}//gia/application-analysis`;
+    const ALLOCATION_ENDPOINT = `allocations`;
+    const APPLICATION_ANALYSIS_ENDPOINT = `gia/application-analysis`;
 
-    const newAllocation = await gerapi.mutate(
+    const newAllocation = await geriapi.mutate(
       ALLOCATION_ENDPOINT,
       { ...allocation, creator: user?.id },
       token,
@@ -56,9 +58,12 @@ export function AllocationWithApplicationCreationForm({ user, applicant, token }
     let newAnalysis = null;
 
     if (!!newAllocation?.id) {
-      newAnalysis = await gerapi.mutate(
+      newAnalysis = await geriapi.mutate(
         APPLICATION_ANALYSIS_ENDPOINT,
-        { ...application, allocation: newAllocation?.id },
+        {
+          application: { ...application, allocation: newAllocation?.id },
+          aiMessages: artificialIntelligencePrompt,
+        },
         token,
       );
     }
@@ -87,7 +92,16 @@ export function AllocationWithApplicationCreationForm({ user, applicant, token }
           : {}),
       };
 
-      const newAnalysis = await generateArtificialIntelligenceAnalysis(allocation, applicationData);
+      const artificialIntelligencePrompt = openAIMessages.applicationAnalysis(
+        `${allocation?.name}\n${allocation?.description}`,
+        applicant?.curricula?.find((curriculumItem) => curriculumItem?.isActive)?.content as string,
+      );
+
+      const newAnalysis = await generateArtificialIntelligenceAnalysis(
+        allocation,
+        applicationData,
+        artificialIntelligencePrompt,
+      );
 
       if (newAnalysis?.id) {
         router.push(`/dashboard/application/${newAnalysis?.id}`);

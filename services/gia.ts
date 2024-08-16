@@ -1,5 +1,5 @@
 export const openAIMessages = {
-  applicationAnalysis(content: ApplicationAnalysisContentType) {
+  applicationAnalysis(allocation: string, applicantCurriculum: string) {
     const formatResponseType = `{
         "positionCompatibility": número de 0.00 à 100.00, 
         "automatedAnalysisFromIA": a análise feita do meu currículo em relação a vaga no formato de tópicos stringyfied HTML contendo os requisitos que possuo e os que não possuo e a explicação comprovativa da existência ou não desses requisitos no meu currículo,
@@ -22,8 +22,8 @@ export const openAIMessages = {
     serializedMessages.push({
       role: 'assistent',
       content: `hey gpt. analise por favor os dados da vaga e do meu currículo de candidato providenciados a seguir.
-        - vaga: ${content.allocation};
-        - candidato: ${content.applicantCurriculum}.
+        - vaga: ${allocation};
+        - candidato: ${applicantCurriculum}.
 
         depois de analisar, calcule o percentual de compatibilidade do meu currículo com a vaga, de 0.00 à 100.00 e guarde esse número no formato número decimal de apenas duas casas decimais.
 
@@ -45,8 +45,3 @@ export const openAIMessages = {
     return serializedMessages;
   },
 };
-
-interface ApplicationAnalysisContentType {
-  applicantCurriculum: string;
-  allocation: string;
-}

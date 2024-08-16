@@ -44,7 +44,7 @@ export function AllocationWithApplicationCreationForm({ user, userType, token }:
     application: ApplicationType,
     applicant: ApplicantType | null,
   ) => {
-    const API_URL = `${process.env.NEXT_PUBLIC_API_ULR}/api/application/ia`;
+    const API_URL = `${process.env.NEXT_PUBLIC_API_ULR}/api/gia/application-analysis`;
     const MUTATION_DATA = { allocation, application, applicant, creator: user };
 
     const analysis = await gerapi.mutate(API_URL, MUTATION_DATA, token);

@@ -2,7 +2,6 @@ import { calculator } from '@/services/calculator';
 import geriapi from '@/services/geriapi';
 import { openAIMessages } from '@/services/gia';
 import { AllocationType } from '@/types/allocation';
-import { ReadApplicantType } from '@/types/applicant';
 import { ApplicationType } from '@/types/application';
 import { ArtificialIntelligencePromptType } from '@/types/gia';
 import { ReadUserType } from '@/types/user';
@@ -15,10 +14,9 @@ import { FormControlWithLabel } from './ControlWithLabel';
 interface PropTypes {
   token?: string;
   user?: ReadUserType;
-  applicant?: ReadApplicantType;
 }
 
-export function AllocationWithApplicationCreationForm({ user, applicant, token }: PropTypes) {
+export function AllocationWithApplicationCreationForm({ user, token }: PropTypes) {
   const [isLoading, setIsLoading] = useState(false);
 
   const toast = useToast();
@@ -30,14 +28,14 @@ export function AllocationWithApplicationCreationForm({ user, applicant, token }
     formState: { errors: formErrors },
   } = useForm<AllocationType>({
     defaultValues: {
-      applicationURL: '1',
+      applicationURL: '',
       automaticClosingDate: calculator?.addDays(60, new Date()),
-      description: '1',
+      description: '',
       isPublic: false,
       isRemote: false,
-      name: '1',
+      name: '',
       openPositions: 1,
-      company: 'starks industries',
+      company: '',
     },
   });
 
@@ -82,7 +80,8 @@ export function AllocationWithApplicationCreationForm({ user, applicant, token }
       const applicationData = {
         applicantName: user?.name,
         applicantEmail: user?.email,
-        applicant: applicant?.id,
+        applicant: user?.applicant?.id,
+        applicantCurriculum: user?.applicant?.curriculumURL,
         ...(!!processStages?.length
           ? {
               process: processStages?.map((stageItem) => {
@@ -94,7 +93,7 @@ export function AllocationWithApplicationCreationForm({ user, applicant, token }
 
       const artificialIntelligencePrompt = openAIMessages.applicationAnalysis(
         `${allocation?.name}\n${allocation?.description}`,
-        applicant?.curricula?.find((curriculumItem) => curriculumItem?.isActive)?.content as string,
+        user?.applicant?.curriculum as string,
       );
 
       const newAnalysis = await generateArtificialIntelligenceAnalysis(

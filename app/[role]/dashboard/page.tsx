@@ -2,13 +2,12 @@
 import geriapi from '@/services/geriapi';
 import { session } from '@/services/session';
 import { QueryApplicationType } from '@/types/application';
-import { DynamicPagesBasePropTypes } from '@/types/generic';
 import { Card, CardBody, CardFooter, Divider, SimpleGrid, Skeleton, Text } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import queryStringClient from 'qs';
 
-export default function DashboardPage({ params: { role } }: DynamicPagesBasePropTypes) {
+export default function DashboardPage() {
   const { data: sessionCookie } = useQuery({
     queryKey: ['sessionCookie'],
     queryFn: () => session.getCookie('session'),
@@ -18,7 +17,7 @@ export default function DashboardPage({ params: { role } }: DynamicPagesBaseProp
     const queryParameters = queryStringClient.stringify(
       {
         sort: ['id:desc'],
-        filters: { applicant: sessionCookie?.user?.applicantID },
+        filters: { applicant: sessionCookie?.user?.applicant?.id },
         populate: { allocation: { fields: ['id', 'name', 'company'] } },
       },
       { encodeValuesOnly: true },

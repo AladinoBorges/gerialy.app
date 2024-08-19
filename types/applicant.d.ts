@@ -5,6 +5,7 @@ import { UserType } from './user';
 
 export interface ApplicantType {
   curriculumURL?: string;
+  curriculum?: string;
   linkedin?: string;
   avatarURL?: string;
   birthday?: Date;
@@ -15,4 +16,16 @@ export interface ApplicantType {
 
 export interface ReadApplicantType extends ApplicantType {
   id: IDType;
+}
+
+export interface StrapiQueryApplicantType {
+  id: IDType;
+  attributes: {
+    curriculum?: string;
+    curriculumURL?: string;
+    linkedin?: string;
+    avatarURL?: string;
+    birthday?: Date;
+    applications?: ApplicationType[];
+  };
 }

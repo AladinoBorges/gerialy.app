@@ -86,7 +86,7 @@ export const session = {
       const populateQuery = queryString.stringify({
         populate: {
           role: { fields: ['name'] },
-          applicant: { fields: ['id'] },
+          applicant: { fields: ['*'] },
         },
       });
 
@@ -96,11 +96,7 @@ export const session = {
         const { role = null, applicant = null } = fullUser;
         const userRole = role?.name || 'applicant';
 
-        this.createCookie(
-          { ...user, role: role?.name || 'applicant', applicantID: applicant?.id },
-          'session',
-          jwt,
-        );
+        this.createCookie({ ...user, role: role?.name || 'applicant', applicant }, 'session', jwt);
 
         return `/${userRole}/dashboard/new`;
       }

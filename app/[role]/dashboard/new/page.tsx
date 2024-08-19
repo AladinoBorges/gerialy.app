@@ -2,34 +2,20 @@
 
 import { AllocationWithApplicationCreationForm } from '@/components/Forms/AllocationWithApplicationCreation';
 import { session } from '@/services/session';
-import { ReadUserType } from '@/types/user';
-import { Flex } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
+import { Flex, Skeleton } from '@chakra-ui/react';
+import { useQuery } from '@tanstack/react-query';
 
 export default function UserDashboardPage() {
-  const [cookies, setCookies] = useState<{ user: ReadUserType; token: string } | {}>({});
-
-  useEffect(() => {
-    (async () => {
-      const sessionCookies = await session.getCookie('session');
-      if (!sessionCookies) {
-        return;
-      }
-
-      const user = sessionCookies?.user;
-      const token = sessionCookies?.token;
-
-      if (!!user && !!token) {
-        setCookies(() => ({ user, token }));
-      }
-    })();
-
-    return () => {};
-  }, []);
+  const { data: sessionCookie, isSuccess } = useQuery({
+    queryKey: ['sessionCookie'],
+    queryFn: () => session.getCookie('session'),
+  });
 
   return (
-    <Flex width='100%'>
-      <AllocationWithApplicationCreationForm {...cookies} />
-    </Flex>
+    <Skeleton width='100%' isLoaded={isSuccess}>
+      <Flex width='100%'>
+        <AllocationWithApplicationCreationForm {...sessionCookie} />
+      </Flex>
+    </Skeleton>
   );
 }

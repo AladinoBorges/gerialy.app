@@ -103,7 +103,7 @@ export function AllocationWithApplicationCreationForm({ user, applicant, token }
       );
 
       if (newAnalysis?.id) {
-        router.push(`/dashboard/application/${newAnalysis?.id}`);
+        router.push(`/applicant/dashboard/application/${newAnalysis?.id}`);
 
         return;
       }

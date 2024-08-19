@@ -26,7 +26,7 @@ const geriapi = {
       })
       ?.catch((error) => ({ error }));
 
-    return result?.data;
+    return result?.data || result;
   },
 
   async get(route: string, token?: string) {
@@ -49,7 +49,7 @@ const geriapi = {
       })
       ?.catch((error) => ({ error }));
 
-    return result?.data;
+    return result?.data || result;
   },
 };
 

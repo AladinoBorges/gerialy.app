@@ -58,28 +58,42 @@ export const session = {
 
   async login(payload: LoginPayloadType) {
     try {
-      return gerapi
-        .mutate('auth/local?populate=role', payload)
-        ?.then(async (response: LoginResponseType) => {
-          const { user, jwt } = response;
+      const loginResponse: LoginResponseType = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/local`,
+        {
+          method: 'POST',
+          body: JSON.stringify({ ...payload }),
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+        },
+      )?.then((response) => {
+        if (!response?.ok) {
+          throw new Error(`Response status: ${response?.status}`);
+        }
 
-          if (!jwt) {
-            return;
-          }
+        return response?.json();
+      });
 
-          const fullUser = await gerapi.get('users/me?populate=role', jwt);
+      const { user, jwt } = loginResponse;
 
-          if (!!fullUser?.id) {
-            const { role = null, ...restOfFullUser } = fullUser;
-            const userRole = role?.name || 'applicant';
+      if (!jwt) {
+        return;
+      }
 
-            this.createCookie({ ...user, role: role?.name || 'applicant' }, 'session', jwt);
+      const fullUser = await gerapi.get('users/me?populate=role', jwt);
 
-            return `/${userRole}/dashboard/new`;
-          }
+      if (!!fullUser?.id) {
+        const { role = null } = fullUser;
+        const userRole = role?.name || 'applicant';
 
-          return;
-        });
+        this.createCookie({ ...user, role: role?.name || 'applicant' }, 'session', jwt);
+
+        return `/${userRole}/dashboard/new`;
+      }
+
+      return;
     } catch (error) {
       console.error(`[SESSION SERVICE] login - an error occured: `, error);
     }

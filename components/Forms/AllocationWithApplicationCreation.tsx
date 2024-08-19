@@ -61,8 +61,8 @@ export function AllocationWithApplicationCreationForm({ user, applicant, token }
       newAnalysis = await geriapi.mutate(
         APPLICATION_ANALYSIS_ENDPOINT,
         {
-          application: { ...application, allocation: newAllocation?.id },
           aiMessages: artificialIntelligencePrompt,
+          application: { ...application, allocation: newAllocation?.id },
         },
         token,
       );
@@ -82,7 +82,6 @@ export function AllocationWithApplicationCreationForm({ user, applicant, token }
         applicantName: user?.name,
         applicantEmail: user?.email,
         applicant: applicant?.id,
-        analysisDate: new Date(),
         ...(!!processStages?.length
           ? {
               process: processStages?.map((stageItem) => {

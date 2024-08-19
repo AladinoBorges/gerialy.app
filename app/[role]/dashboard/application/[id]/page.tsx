@@ -1,9 +1,20 @@
 'use client';
 
-import { ApplicationType } from '@/types/application';
+import { QueryApplicationType } from '@/types/application';
 import { IDType } from '@/types/generic';
-import { Flex } from '@chakra-ui/react';
+import {
+  Button,
+  Divider,
+  Flex,
+  Skeleton,
+  Stack,
+  Stat,
+  StatLabel,
+  StatNumber,
+  Text,
+} from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
+import queryStringClient from 'qs';
 import { useEffect, useState } from 'react';
 import gerapi from '../../../../../services/geriapi';
 import { session } from '../../../../../services/session';
@@ -12,11 +23,19 @@ export default function AnalysisResumePage({ params: { id } }: PropTypes) {
   const [sessionToken, setSessionToken] = useState<string | null>(null);
 
   const getApplication = async () => {
-    const API_URL = `applications/${id}`;
+    const queryParameters = queryStringClient.stringify({
+      populate: {
+        allocation: {
+          fields: ['id', 'name', 'company'],
+        },
+      },
+    });
 
-    const application: ApplicationType = await gerapi.get(API_URL, sessionToken as string);
+    const API_URL = `applications/${id}?${queryParameters}`;
 
-    return application;
+    const application: QueryApplicationType = await gerapi.get(API_URL, sessionToken as string);
+
+    return { ...application, ...(application?.attributes ?? {}) };
   };
 
   const {
@@ -25,9 +44,9 @@ export default function AnalysisResumePage({ params: { id } }: PropTypes) {
     isPending,
     isSuccess,
   } = useQuery({
-    queryKey: ['applicationByID'],
     queryFn: getApplication,
     enabled: !!sessionToken?.trim(),
+    queryKey: ['applicationByID', id],
   });
 
   useEffect(() => {
@@ -42,7 +61,84 @@ export default function AnalysisResumePage({ params: { id } }: PropTypes) {
     return () => {};
   }, []);
 
-  return <Flex>RESUMO DA ANÁLISE DA CANDIDATURA</Flex>;
+  return (
+    <Skeleton isLoaded={isSuccess} width='100%'>
+      <Flex
+        gap='1rem'
+        width='100%'
+        direction='column'
+        alignSelf='center'
+        paddingBottom='4rem'
+        paddingX={{ base: 0, md: '8rem' }}
+      >
+        <Flex
+          align='center'
+          padding='8rem 2rem 0 2rem'
+          justify='space-between'
+          gap={{ base: '0.5rem', md: '2rem' }}
+          direction={{ base: 'column', md: 'row' }}
+        >
+          <Stack spacing={0}>
+            <Text as='h1'>
+              {`#${application?.allocation?.data?.id} | ${application?.allocation?.data?.attributes?.name}`}
+            </Text>
+
+            <Text>{application?.allocation?.data?.attributes?.company}</Text>
+          </Stack>
+
+          {application?.analysedByIA ? (
+            <Stat textAlign='end'>
+              <StatNumber>{`${application?.positionCompatibility * 100}%`}</StatNumber>
+              <StatLabel>compatibilidade</StatLabel>
+            </Stat>
+          ) : (
+            <Button>analisar</Button>
+          )}
+        </Flex>
+
+        <Divider />
+
+        <Flex padding='2rem 2rem 0 2rem' alignSelf='center' direction='column' gap='3rem'>
+          {!!application?.analysisConclusion?.trim ? (
+            <Stack>
+              <Text>resumo:</Text>
+
+              <Text>{application?.analysisConclusion}</Text>
+            </Stack>
+          ) : null}
+
+          {!!application?.emailCoverLetter?.trim ? (
+            <Stack>
+              <Text>sugestão da carta de apresentação:</Text>
+
+              <Text>{application?.analysisConclusion}</Text>
+            </Stack>
+          ) : null}
+
+          <Divider />
+
+          {!!application?.automatedAnalysisFromIA?.trim() ? (
+            <Stack direction='column'>
+              <div
+                id='ia-analysis-content'
+                dangerouslySetInnerHTML={{
+                  __html: application?.automatedAnalysisFromIA
+                    ?.trim()
+                    ?.replace(/(<? *script)/gi, 'illegalscript'),
+                }}
+              />
+
+              <Text textAlign='right'>
+                {`data da análise: ${new Date(application?.analysisDate)?.toLocaleDateString(
+                  'pt',
+                )}`}
+              </Text>
+            </Stack>
+          ) : null}
+        </Flex>
+      </Flex>
+    </Skeleton>
+  );
 }
 
 interface PropTypes {

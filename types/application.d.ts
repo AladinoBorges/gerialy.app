@@ -1,4 +1,4 @@
-import { AllocationType } from './allocation';
+import { ReadAllocationType } from './allocation';
 import { ReadApplicantType } from './applicant';
 import { IDType } from './generic';
 
@@ -14,7 +14,7 @@ export interface ProcessType {
 }
 
 export interface ApplicationType {
-  allocation?: AllocationType;
+  allocation?: ReadAllocationType;
   process?: ProcessType[];
   applicant?: IDType | ReadApplicantType;
   wasHired?: boolean;
@@ -22,12 +22,32 @@ export interface ApplicationType {
   immediateAvailability?: boolean;
   applicantName?: string;
   automatedAnalysisFromIA?: string;
-  analysedByIAa?: boolean;
+  analysedByIA?: boolean;
   analysisDate?: Date;
   positionCompatibility?: number;
   hiringSalary?: number;
 }
 
-export interface ReadApplicationType extends ApplicationType {
+export interface ReadApplicationType {
   id: IDType;
+  attributes: ApplicationType;
+}
+
+export interface QueryApplicationType {
+  id: IDType;
+  attributes?: {
+    allocation?: { data: ReadAllocationType };
+    process?: ProcessType[];
+    wasHired?: boolean;
+    salaryExpectation?: number;
+    immediateAvailability?: boolean;
+    applicantName?: string;
+    automatedAnalysisFromIA?: string;
+    analysedByIA?: boolean;
+    analysisDate?: Date;
+    analysisConclusion?: string;
+    emailCoverLetter?: string;
+    positionCompatibility?: number;
+    hiringSalary?: number;
+  };
 }

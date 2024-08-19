@@ -31,4 +31,5 @@ export interface AllocationType {
 
 export interface ReadAllocationType extends AllocationType {
   id: IDType;
+  attributes: AllocationType;
 }

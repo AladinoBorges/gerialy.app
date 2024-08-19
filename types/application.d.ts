@@ -49,5 +49,6 @@ export interface QueryApplicationType {
     emailCoverLetter?: string;
     positionCompatibility?: number;
     hiringSalary?: number;
+    updatedAt?: Date;
   };
 }

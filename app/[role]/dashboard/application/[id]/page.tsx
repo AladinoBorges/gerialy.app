@@ -49,6 +49,8 @@ export default function AnalysisResumePage({ params: { id } }: PropTypes) {
     queryKey: ['applicationByID', id],
   });
 
+  const dynmicApplicationAnalysisDate = application?.analysisDate || application?.updatedAt;
+
   useEffect(() => {
     (async () => {
       const cookie = await session.getCookie('session');
@@ -138,11 +140,13 @@ export default function AnalysisResumePage({ params: { id } }: PropTypes) {
                 }}
               />
 
-              <Text textAlign='right'>
-                {`data da análise: ${new Date(application?.analysisDate)?.toLocaleDateString(
-                  'pt',
-                )}`}
-              </Text>
+              {!!dynmicApplicationAnalysisDate ? (
+                <Text textAlign='right'>
+                  {`data da análise: ${new Date(dynmicApplicationAnalysisDate)?.toLocaleDateString(
+                    'pt',
+                  )}`}
+                </Text>
+              ) : null}
             </Stack>
           ) : null}
         </Flex>

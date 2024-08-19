@@ -80,7 +80,9 @@ export default function AnalysisResumePage({ params: { id } }: PropTypes) {
         >
           <Stack spacing={0}>
             <Text as='h1'>
-              {`#${application?.allocation?.data?.id} | ${application?.allocation?.data?.attributes?.name}`}
+              {`#${
+                application?.allocation?.data?.id
+              } | ${application?.allocation?.data?.attributes?.name?.toLowerCase()}`}
             </Text>
 
             <Text>{application?.allocation?.data?.attributes?.company}</Text>
@@ -88,8 +90,8 @@ export default function AnalysisResumePage({ params: { id } }: PropTypes) {
 
           {application?.analysedByIA ? (
             <Stat textAlign='end'>
-              <StatNumber>{`${application?.positionCompatibility * 100}%`}</StatNumber>
-              <StatLabel>compatibilidade</StatLabel>
+              <StatNumber>{application?.positionCompatibility}/1</StatNumber>
+              <StatLabel>compatível</StatLabel>
             </Stat>
           ) : (
             <Button>analisar</Button>
@@ -101,17 +103,25 @@ export default function AnalysisResumePage({ params: { id } }: PropTypes) {
         <Flex padding='2rem 2rem 0 2rem' alignSelf='center' direction='column' gap='3rem'>
           {!!application?.analysisConclusion?.trim ? (
             <Stack>
-              <Text>resumo:</Text>
+              <Text textAlign='center'>resumo</Text>
 
-              <Text>{application?.analysisConclusion}</Text>
+              <Text>{application?.analysisConclusion?.toLowerCase()}</Text>
             </Stack>
           ) : null}
 
           {!!application?.emailCoverLetter?.trim ? (
             <Stack>
-              <Text>sugestão da carta de apresentação:</Text>
+              <Text textAlign='center'>sugestão da carta de apresentação</Text>
 
-              <Text>{application?.analysisConclusion}</Text>
+              <Stack>
+                {application?.emailCoverLetter?.split('\\n')?.map((contentItem, index) => {
+                  return (
+                    <Text key={`conver-letter-content-part-$(index + 1)`}>
+                      <i>{contentItem}</i>
+                    </Text>
+                  );
+                })}
+              </Stack>
             </Stack>
           ) : null}
 

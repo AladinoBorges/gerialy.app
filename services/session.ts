@@ -1,6 +1,7 @@
 import { LoginPayloadType, LoginResponseType } from '@/types/session';
 import { UserType } from '@/types/user';
 import { getCookie as cookieGetter, deleteCookie, setCookie } from 'cookies-next';
+import queryString from 'qs';
 import { calculator } from './calculator';
 import gerapi from './geriapi';
 import secrets from './secrets';
@@ -82,13 +83,24 @@ export const session = {
         return;
       }
 
-      const fullUser = await gerapi.get('users/me?populate=role', jwt);
+      const populateQuery = queryString.stringify({
+        populate: {
+          role: { fields: ['name'] },
+          applicant: { fields: ['id'] },
+        },
+      });
+
+      const fullUser = await gerapi.get(`users/me?${populateQuery}`, jwt);
 
       if (!!fullUser?.id) {
-        const { role = null } = fullUser;
+        const { role = null, applicant = null } = fullUser;
         const userRole = role?.name || 'applicant';
 
-        this.createCookie({ ...user, role: role?.name || 'applicant' }, 'session', jwt);
+        this.createCookie(
+          { ...user, role: role?.name || 'applicant', applicantID: applicant?.id },
+          'session',
+          jwt,
+        );
 
         return `/${userRole}/dashboard/new`;
       }

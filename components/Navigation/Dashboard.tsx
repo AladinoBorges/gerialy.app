@@ -35,7 +35,7 @@ export function DashboardNavigation({ children }: BaseComponentPropTypes) {
       >
         <ClickableLogo />
 
-        <HStack>
+        <HStack spacing='1.5rem'>
           <Link href='/applicant/dashboard'>
             <Text>minhas vagas</Text>
           </Link>
@@ -44,9 +44,9 @@ export function DashboardNavigation({ children }: BaseComponentPropTypes) {
             <Text>+ nova análise</Text>
           </Link>
 
-          <Link href='/applicant/profile'>
+          {/* <Link href='/applicant/profile'>
             <Text>perfil</Text>
-          </Link>
+          </Link> */}
 
           <Button variant='outline' onClick={startLogoutProcess}>
             sair
@@ -54,7 +54,12 @@ export function DashboardNavigation({ children }: BaseComponentPropTypes) {
         </HStack>
       </HStack>
 
-      <Flex width='100%' maxWidth='1440px' marginX='auto' paddingX={{ base: '1rem', md: '4rem' }}>
+      <Flex
+        width='100%'
+        maxWidth='1440px'
+        marginX='auto'
+        padding={{ base: '4rem 1rem', md: '8rem 4rem' }}
+      >
         {children}
       </Flex>
 

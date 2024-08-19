@@ -1,4 +1,5 @@
-import { IDType } from '../generic';
+import { ReadApplicantType } from './applicant';
+import { IDType } from './generic';
 
 export interface UserType {
   blocked?: boolean;
@@ -7,6 +8,8 @@ export interface UserType {
   role: string;
   username?: string;
   name?: string;
+  applicant?: ReadApplicantType;
+  applicantID?: IDType;
 }
 
 export interface ReadUserType extends UserType {

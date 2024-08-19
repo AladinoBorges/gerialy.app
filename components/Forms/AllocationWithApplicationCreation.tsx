@@ -30,13 +30,14 @@ export function AllocationWithApplicationCreationForm({ user, applicant, token }
     formState: { errors: formErrors },
   } = useForm<AllocationType>({
     defaultValues: {
-      applicationURL: '',
+      applicationURL: '1',
       automaticClosingDate: calculator?.addDays(60, new Date()),
-      description: '',
+      description: '1',
       isPublic: false,
       isRemote: false,
-      name: '',
+      name: '1',
       openPositions: 1,
+      company: 'starks industries',
     },
   });
 

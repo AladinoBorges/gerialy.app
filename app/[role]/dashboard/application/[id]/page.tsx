@@ -15,12 +15,14 @@ import {
 } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import queryStringClient from 'qs';
-import { useEffect, useState } from 'react';
 import gerapi from '../../../../../services/geriapi';
 import { session } from '../../../../../services/session';
 
 export default function AnalysisResumePage({ params: { id } }: PropTypes) {
-  const [sessionToken, setSessionToken] = useState<string | null>(null);
+  const { data: sessionCookie } = useQuery({
+    queryKey: ['sessionCookie'],
+    queryFn: () => session.getCookie('session'),
+  });
 
   const getApplication = async () => {
     const queryParameters = queryStringClient.stringify({
@@ -33,50 +35,26 @@ export default function AnalysisResumePage({ params: { id } }: PropTypes) {
 
     const API_URL = `applications/${id}?${queryParameters}`;
 
-    const application: QueryApplicationType = await gerapi.get(API_URL, sessionToken as string);
+    const application: QueryApplicationType = await gerapi.get(API_URL, sessionCookie?.token);
 
     return { ...application, ...(application?.attributes ?? {}) };
   };
 
-  const {
-    data: application,
-    isError,
-    isPending,
-    isSuccess,
-  } = useQuery({
+  const { data: application, isSuccess } = useQuery({
     queryFn: getApplication,
-    enabled: !!sessionToken?.trim(),
+    enabled: !!sessionCookie?.token?.trim(),
     queryKey: ['applicationByID', id],
   });
 
   const dynmicApplicationAnalysisDate = application?.analysisDate || application?.updatedAt;
 
-  useEffect(() => {
-    (async () => {
-      const cookie = await session.getCookie('session');
-
-      if (cookie?.token) {
-        setSessionToken(cookie?.token);
-      }
-    })();
-
-    return () => {};
-  }, []);
-
   return (
     <Skeleton isLoaded={isSuccess} width='100%'>
-      <Flex
-        gap='1rem'
-        width='100%'
-        direction='column'
-        alignSelf='center'
-        paddingBottom='4rem'
-        paddingX={{ base: 0, md: '8rem' }}
-      >
+      <Flex gap='1rem' width='100%' direction='column' alignSelf='center' paddingBottom='4rem'>
         <Flex
           align='center'
-          padding='8rem 2rem 0 2rem'
           justify='space-between'
+          padding='0 2rem 0 2rem'
           gap={{ base: '0.5rem', md: '2rem' }}
           direction={{ base: 'column', md: 'row' }}
         >

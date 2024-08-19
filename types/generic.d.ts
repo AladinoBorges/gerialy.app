@@ -9,3 +9,10 @@ export interface BaseComponentPropTypes {
 export type FormInputEventType = FormEvent<HTMLInputElement>;
 
 export type FormChangeEventHandlerType = ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
+
+export interface DynamicPagesBasePropTypes {
+  params: {
+    id: string;
+    role: string;
+  };
+}

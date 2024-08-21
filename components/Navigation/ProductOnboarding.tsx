@@ -13,12 +13,6 @@ export function ProductOnboardingNavigationBar({ children }: BaseComponentPropTy
         <HStack padding='0.75rem 4rem' borderBottom='1px solid gray' justify='space-between'>
           <ClickableLogo />
 
-          {/* <HStack>
-            <Text>produto</Text>
-            <Text>preço</Text>
-            <Text>sobre</Text>
-          </HStack> */}
-
           <ButtonGroup>
             <Button onClick={loginModalDislosures?.onOpen}>entrar</Button>
 
@@ -41,9 +35,9 @@ export function ProductOnboardingNavigationBar({ children }: BaseComponentPropTy
         <GenericModal
           isOpen={loginModalDislosures.isOpen}
           onClose={loginModalDislosures.onClose}
-          title='entrar'
+          title=''
         >
-          <UserLoginForm role='applicant' />
+          <UserLoginForm />
         </GenericModal>
       </Flex>
     </main>

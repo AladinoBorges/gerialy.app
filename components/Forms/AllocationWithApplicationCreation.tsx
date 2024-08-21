@@ -1,8 +1,9 @@
 import { calculator } from '@/services/calculator';
-import gerapi from '@/services/geriapi';
+import geriapi from '@/services/geriapi';
+import { openAIMessages } from '@/services/gia';
 import { AllocationType } from '@/types/allocation';
-import { ApplicantType, ReadApplicantType } from '@/types/applicant';
 import { ApplicationType } from '@/types/application';
+import { ArtificialIntelligencePromptType } from '@/types/gia';
 import { ReadUserType } from '@/types/user';
 import { Box, Button, Flex, Heading, Input, Switch, Textarea, useToast } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
@@ -13,10 +14,9 @@ import { FormControlWithLabel } from './ControlWithLabel';
 interface PropTypes {
   token?: string;
   user?: ReadUserType;
-  userType?: ReadApplicantType;
 }
 
-export function AllocationWithApplicationCreationForm({ user, userType, token }: PropTypes) {
+export function AllocationWithApplicationCreationForm({ user, token }: PropTypes) {
   const [isLoading, setIsLoading] = useState(false);
 
   const toast = useToast();
@@ -35,6 +35,7 @@ export function AllocationWithApplicationCreationForm({ user, userType, token }:
       isRemote: false,
       name: '',
       openPositions: 1,
+      company: '',
     },
   });
 
@@ -42,14 +43,31 @@ export function AllocationWithApplicationCreationForm({ user, userType, token }:
   const generateArtificialIntelligenceAnalysis = async (
     allocation: AllocationType,
     application: ApplicationType,
-    applicant: ApplicantType | null,
+    artificialIntelligencePrompt: ArtificialIntelligencePromptType[],
   ) => {
-    const API_URL = `${process.env.NEXT_PUBLIC_API_ULR}/api/application/ia`;
-    const MUTATION_DATA = { allocation, application, applicant, creator: user };
+    const ALLOCATION_ENDPOINT = `allocations`;
+    const APPLICATION_ANALYSIS_ENDPOINT = `gia/application-analysis`;
 
-    const analysis = await gerapi.mutate(API_URL, MUTATION_DATA, token);
+    const newAllocation = await geriapi.mutate(
+      ALLOCATION_ENDPOINT,
+      { ...allocation, creator: user?.id },
+      token,
+    );
 
-    return analysis;
+    let newAnalysis = null;
+
+    if (!!newAllocation?.id) {
+      newAnalysis = await geriapi.mutate(
+        APPLICATION_ANALYSIS_ENDPOINT,
+        {
+          aiMessages: artificialIntelligencePrompt,
+          application: { ...application, allocation: newAllocation?.id },
+        },
+        token,
+      );
+    }
+
+    return newAnalysis;
   };
   // ? CRUD - end
 
@@ -62,7 +80,8 @@ export function AllocationWithApplicationCreationForm({ user, userType, token }:
       const applicationData = {
         applicantName: user?.name,
         applicantEmail: user?.email,
-        analysisDate: new Date(),
+        applicant: user?.applicant?.id,
+        applicantCurriculum: user?.applicant?.curriculumURL,
         ...(!!processStages?.length
           ? {
               process: processStages?.map((stageItem) => {
@@ -72,20 +91,19 @@ export function AllocationWithApplicationCreationForm({ user, userType, token }:
           : {}),
       };
 
-      const applicantData = {
-        user: user?.id,
-        name: user?.name,
-        email: user?.email,
-      };
+      const artificialIntelligencePrompt = openAIMessages.applicationAnalysis(
+        `${allocation?.name}\n${allocation?.description}`,
+        user?.applicant?.curriculum as string,
+      );
 
       const newAnalysis = await generateArtificialIntelligenceAnalysis(
         allocation,
         applicationData,
-        applicantData,
+        artificialIntelligencePrompt,
       );
 
       if (newAnalysis?.id) {
-        router.push(`/dashboard/application/${newAnalysis?.id}`);
+        router.push(`/applicant/dashboard/application/${newAnalysis?.id}`);
 
         return;
       }

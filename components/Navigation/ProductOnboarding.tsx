@@ -13,12 +13,6 @@ export function ProductOnboardingNavigationBar({ children }: BaseComponentPropTy
         <HStack padding='0.75rem 4rem' borderBottom='1px solid gray' justify='space-between'>
           <ClickableLogo />
 
-          {/* <HStack>
-            <Text>produto</Text>
-            <Text>preço</Text>
-            <Text>sobre</Text>
-          </HStack> */}
-
           <ButtonGroup>
             <Button onClick={loginModalDislosures?.onOpen}>entrar</Button>
 

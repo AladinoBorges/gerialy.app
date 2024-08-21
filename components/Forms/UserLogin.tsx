@@ -1,7 +1,9 @@
 import { session } from '@/services/session';
 import { FormChangeEventHandlerType } from '@/types/generic';
 import { LoginPayloadType } from '@/types/session';
-import { Button, Flex, Input } from '@chakra-ui/react';
+import { Button, Flex, Input, Text } from '@chakra-ui/react';
+import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { MouseEventHandler, useState } from 'react';
 import { FormControlWithLabel } from './ControlWithLabel';
@@ -39,8 +41,31 @@ export function UserLoginForm() {
   };
 
   return (
-    <form>
-      <Flex direction='column' width='100%' gap='1.5rem' padding='4rem 0.5rem'>
+    <form style={{ width: '100%', maxWidth: '500px' }}>
+      <Flex
+        gap='2rem'
+        width='100%'
+        rounded='lg'
+        boxShadow='md'
+        direction='column'
+        padding='4rem 4rem 8rem 4rem'
+      >
+        <Flex direction='column' align='center' paddingBottom='1rem' gap='0.5rem' width='100%'>
+          <Link href={`${process.env.NEXT_PUBLIC_LANDING_PAGE}`}>
+            <Image
+              priority
+              width={135}
+              height={42.5}
+              alt='geria beta logo'
+              src='/gia_beta_logo.png'
+            />
+          </Link>
+
+          <Text cursor='default' textAlign='center'>
+            {"inteligência p'ra quem gere e quem busca."}
+          </Text>
+        </Flex>
+
         <FormControlWithLabel isRequired label='email'>
           <Input
             type='email'

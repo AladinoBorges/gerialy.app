@@ -1,5 +1,5 @@
 import { ReadAllocationType } from './allocation';
-import { ReadApplicantType } from './applicant';
+import { ReadApplicantType, StrapiQueryApplicantType } from './applicant';
 import { IDType } from './generic';
 
 export enum ApplicationStatusEnum {
@@ -50,5 +50,6 @@ export interface QueryApplicationType {
     positionCompatibility?: number;
     hiringSalary?: number;
     updatedAt?: Date;
+    applicant?: { data: StrapiQueryApplicantType };
   };
 }

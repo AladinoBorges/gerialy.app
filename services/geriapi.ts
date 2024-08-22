@@ -1,7 +1,7 @@
 const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/api`;
 
 const geriapi = {
-  async mutate(route: string, data: {}, token?: string) {
+  async mutate(route: string, data: {}, token?: string, method = 'POST') {
     if (!Object?.keys(data)?.length) {
       return null;
     }

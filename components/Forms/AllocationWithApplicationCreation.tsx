@@ -1,3 +1,4 @@
+import { useSharedData } from '@/hooks/useSharedData';
 import { calculator } from '@/services/calculator';
 import geriapi from '@/services/geriapi';
 import { openAIMessages } from '@/services/gia';
@@ -38,6 +39,7 @@ export function AllocationWithApplicationCreationForm({ user, token, curriculum 
 
   const toast = useToast();
   const router = useRouter();
+  const { wallet } = useSharedData();
 
   const {
     control,
@@ -64,6 +66,14 @@ export function AllocationWithApplicationCreationForm({ user, token, curriculum 
     application: ApplicationType,
     artificialIntelligencePrompt: ArtificialIntelligencePromptType[],
   ) => {
+    const minimumNecessaryCoins = 6;
+
+    if (wallet?.demoCoins < minimumNecessaryCoins) {
+      throw new Error(
+        `são necessários pelo menos ${minimumNecessaryCoins} cŕeditos para analisar a candidatura. recarregue a sua conta para continuar!`,
+      );
+    }
+
     const ALLOCATION_ENDPOINT = `allocations`;
     const APPLICATION_ENDPOINT = `applications`;
     const APPLICATION_ANALYSIS_ENDPOINT = `gia/application-analysis`;
@@ -94,6 +104,13 @@ export function AllocationWithApplicationCreationForm({ user, token, curriculum 
           application: { id: newApplication?.id },
         },
         token,
+      );
+
+      geriapi.mutate(
+        `/wallets/${wallet?.id}`,
+        { demoCoins: wallet?.demoCoins - minimumNecessaryCoins },
+        token,
+        'PUT',
       );
     }
 
@@ -141,18 +158,19 @@ export function AllocationWithApplicationCreationForm({ user, token, curriculum 
         duration: 5000,
         status: 'error',
         isClosable: true,
-        title: 'Erro ao analizar a sua candidatura.',
-        description: 'Os dados foram guardados, tente analisar novamente mais tarde.',
+        title: 'erro ao analizar a sua candidatura.',
+        description: 'os dados foram guardados, tente analisar novamente mais tarde.',
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error('[ALLOCATION WITH APPLICATION CREATION]: handleSubmission ', error);
 
       toast({
         duration: 5000,
         status: 'error',
+        position: 'top',
         isClosable: true,
-        title: 'Aconteceu um erro no nosso servidor.',
-        description: 'Tente analisar novamente mais tarde.',
+        title: 'algo deu muito errado.',
+        description: error?.message || 'tente novamente mais tarde!',
       });
     } finally {
       setIsLoading(false);

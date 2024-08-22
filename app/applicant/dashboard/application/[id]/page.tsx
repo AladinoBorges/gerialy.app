@@ -1,8 +1,11 @@
 'use client';
 
+import { useGIA } from '@/hooks/useGIA';
+import { AllocationType } from '@/types/allocation';
 import { QueryApplicationType } from '@/types/application';
 import { IDType } from '@/types/generic';
 import {
+  Button,
   Center,
   Divider,
   Flex,
@@ -12,13 +15,20 @@ import {
   StatLabel,
   StatNumber,
   Text,
+  useToast,
 } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import queryStringClient from 'qs';
+import { useState } from 'react';
 import gerapi from '../../../../../services/geriapi';
 import { session } from '../../../../../services/session';
 
 export default function AnalysisResumePage({ params: { id } }: PropTypes) {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const { analyseApplication } = useGIA();
+  const toast = useToast();
+
   const { data: sessionCookie } = useQuery({
     queryKey: ['sessionCookie'],
     queryFn: () => session.getCookie('session'),
@@ -27,9 +37,8 @@ export default function AnalysisResumePage({ params: { id } }: PropTypes) {
   const getApplication = async () => {
     const queryParameters = queryStringClient.stringify({
       populate: {
-        allocation: {
-          fields: ['id', 'name', 'company'],
-        },
+        applicant: { fields: ['curriculum'] },
+        allocation: { fields: ['id', 'name', 'company', 'description'] },
       },
     });
 
@@ -47,6 +56,33 @@ export default function AnalysisResumePage({ params: { id } }: PropTypes) {
   });
 
   const dynmicApplicationAnalysisDate = application?.analysisDate || application?.updatedAt;
+
+  const handleApplicationAnalysis = async () => {
+    try {
+      setIsLoading(true);
+
+      const result = await analyseApplication(
+        application?.id as string,
+        application?.allocation?.data?.attributes as AllocationType,
+        application?.attributes?.applicant?.data?.attributes?.curriculum as string,
+      );
+
+      return result;
+    } catch (error: any) {
+      console.error(`[] - : ${error}`);
+
+      toast({
+        duration: 5000,
+        status: 'error',
+        position: 'top',
+        isClosable: true,
+        title: 'ups! algo deu errado.',
+        description: error?.message || 'tente novamente mais tarde.',
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <Skeleton isLoaded={isSuccess} width='100%'>
@@ -128,11 +164,15 @@ export default function AnalysisResumePage({ params: { id } }: PropTypes) {
             ) : null}
           </Flex>
         ) : (
-          <Center height='50vh'>
+          <Center height='50vh' flexDirection='column' gap='2rem'>
             <Text>
               candidatura não analisada pela inteligência artificial. clique no botão acima para
               analisar.
             </Text>
+
+            <Button isLoading={isLoading} size='lg' onClick={handleApplicationAnalysis}>
+              analisar a candidatura
+            </Button>
           </Center>
         )}
       </Flex>

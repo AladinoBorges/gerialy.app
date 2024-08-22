@@ -1,3 +1,4 @@
+import { useSharedData } from '@/hooks/useSharedData';
 import { session } from '@/services/session';
 import { BaseComponentPropTypes } from '@/types/generic';
 import { Button, ButtonGroup, Flex, HStack, Text, useDisclosure } from '@chakra-ui/react';
@@ -9,6 +10,9 @@ import { GenericModal } from '../Modals/Generic';
 
 export function DashboardNavigation({ children }: BaseComponentPropTypes) {
   const [isLoading, setIsLoading] = useState(false);
+
+  const { wallet } = useSharedData();
+
   const router = useRouter();
 
   const logoutDisclosures = useDisclosure();
@@ -20,7 +24,7 @@ export function DashboardNavigation({ children }: BaseComponentPropTypes) {
   const handleLogout = async () => {
     setIsLoading(true);
 
-    await session.eraseCookie('session');
+    session.eraseCookie('session');
 
     router.push('/');
   };
@@ -44,13 +48,11 @@ export function DashboardNavigation({ children }: BaseComponentPropTypes) {
             <Text>+ nova análise</Text>
           </Link>
 
-          {/* <Link href='/applicant/profile'>
-            <Text>perfil</Text>
-          </Link> */}
-
           <Button variant='outline' onClick={startLogoutProcess}>
             sair
           </Button>
+
+          <Text cursor='default'>{`${wallet?.demoCoins || 0} créditos`}</Text>
         </HStack>
       </HStack>
 

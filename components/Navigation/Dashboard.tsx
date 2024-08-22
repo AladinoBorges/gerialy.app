@@ -37,7 +37,7 @@ export function DashboardNavigation({ children }: BaseComponentPropTypes) {
 
         <HStack spacing='1.5rem'>
           <Link href='/applicant/dashboard'>
-            <Text>minhas vagas</Text>
+            <Text>minhas candidaturas</Text>
           </Link>
 
           <Link href='/applicant/dashboard/new'>

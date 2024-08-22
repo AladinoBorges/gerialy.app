@@ -16,7 +16,7 @@ export enum AllocationStatusEnum {
 export interface AllocationType {
   name?: string;
   description?: string;
-  creator?: UserType;
+  creator?: UserType | IDType;
   isPublic?: boolean;
   company?: string;
   companyImageUrl?: string;
@@ -24,6 +24,7 @@ export interface AllocationType {
   applications?: ApplicationType[];
   isRemote?: boolean;
   applicationURL?: string;
+  applicationEmail?: string;
   openPositions?: number;
   automaticClosingDate: Date;
   status: AllocationStatusEnum;

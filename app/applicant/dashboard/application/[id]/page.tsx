@@ -4,6 +4,7 @@ import { QueryApplicationType } from '@/types/application';
 import { IDType } from '@/types/generic';
 import {
   Button,
+  Center,
   Divider,
   Flex,
   Skeleton,
@@ -80,54 +81,63 @@ export default function AnalysisResumePage({ params: { id } }: PropTypes) {
 
         <Divider />
 
-        <Flex padding='2rem 2rem 0 2rem' alignSelf='center' direction='column' gap='3rem'>
-          {!!application?.analysisConclusion?.trim ? (
-            <Stack>
-              <Text textAlign='center'>resumo</Text>
-
-              <Text>{application?.analysisConclusion?.toLowerCase()}</Text>
-            </Stack>
-          ) : null}
-
-          {!!application?.emailCoverLetter?.trim ? (
-            <Stack>
-              <Text textAlign='center'>sugestão da carta de apresentação</Text>
-
+        {application?.analysedByIA ? (
+          <Flex padding='2rem 2rem 0 2rem' alignSelf='center' direction='column' gap='3rem'>
+            {!!application?.analysisConclusion?.trim ? (
               <Stack>
-                {application?.emailCoverLetter?.split('\\n')?.map((contentItem, index) => {
-                  return (
-                    <Text key={`conver-letter-content-part-$(index + 1)`}>
-                      <i>{contentItem}</i>
-                    </Text>
-                  );
-                })}
+                <Text textAlign='center'>resumo</Text>
+
+                <Text>{application?.analysisConclusion?.toLowerCase()}</Text>
               </Stack>
-            </Stack>
-          ) : null}
+            ) : null}
 
-          <Divider />
+            {!!application?.emailCoverLetter?.trim ? (
+              <Stack>
+                <Text textAlign='center'>sugestão da carta de apresentação</Text>
 
-          {!!application?.automatedAnalysisFromIA?.trim() ? (
-            <Stack direction='column'>
-              <div
-                id='ia-analysis-content'
-                dangerouslySetInnerHTML={{
-                  __html: application?.automatedAnalysisFromIA
-                    ?.trim()
-                    ?.replace(/(<? *script)/gi, 'illegalscript'),
-                }}
-              />
+                <Stack>
+                  {application?.emailCoverLetter?.split('\\n')?.map((contentItem, index) => {
+                    return (
+                      <Text key={`conver-letter-content-part-$(index + 1)`}>
+                        <i>{contentItem}</i>
+                      </Text>
+                    );
+                  })}
+                </Stack>
+              </Stack>
+            ) : null}
 
-              {!!dynmicApplicationAnalysisDate ? (
-                <Text textAlign='right'>
-                  {`data da análise: ${new Date(dynmicApplicationAnalysisDate)?.toLocaleDateString(
-                    'pt',
-                  )}`}
-                </Text>
-              ) : null}
-            </Stack>
-          ) : null}
-        </Flex>
+            <Divider />
+
+            {!!application?.automatedAnalysisFromIA?.trim() ? (
+              <Stack direction='column'>
+                <div
+                  id='ia-analysis-content'
+                  dangerouslySetInnerHTML={{
+                    __html: application?.automatedAnalysisFromIA
+                      ?.trim()
+                      ?.replace(/(<? *script)/gi, 'illegalscript'),
+                  }}
+                />
+
+                {!!dynmicApplicationAnalysisDate ? (
+                  <Text textAlign='right'>
+                    {`data da análise: ${new Date(
+                      dynmicApplicationAnalysisDate,
+                    )?.toLocaleDateString('pt')}`}
+                  </Text>
+                ) : null}
+              </Stack>
+            ) : null}
+          </Flex>
+        ) : (
+          <Center height='50vh'>
+            <Text>
+              candidatura não analisada pela inteligência artificial. clique no botão acima para
+              analisar.
+            </Text>
+          </Center>
+        )}
       </Flex>
     </Skeleton>
   );

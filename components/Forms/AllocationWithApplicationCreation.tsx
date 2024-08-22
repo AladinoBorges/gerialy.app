@@ -18,6 +18,7 @@ interface PropTypes {
 
 export function AllocationWithApplicationCreationForm({ user, token }: PropTypes) {
   const [isLoading, setIsLoading] = useState(false);
+  const [applicationByEmail, setApplicationByEmail] = useState(false);
 
   const toast = useToast();
   const router = useRouter();
@@ -29,6 +30,7 @@ export function AllocationWithApplicationCreationForm({ user, token }: PropTypes
   } = useForm<AllocationType>({
     defaultValues: {
       applicationURL: '',
+      applicationEmail: '',
       automaticClosingDate: calculator?.addDays(60, new Date()),
       description: '',
       isPublic: false,
@@ -36,28 +38,40 @@ export function AllocationWithApplicationCreationForm({ user, token }: PropTypes
       name: '',
       openPositions: 1,
       company: '',
+      creator: user?.id,
     },
   });
 
   // ? CRUD - start
-  const generateArtificialIntelligenceAnalysis = async (
+  const handleArtificialIntelligenceApplicationAnalysisFlux = async (
     allocation: AllocationType,
     application: ApplicationType,
     artificialIntelligencePrompt: ArtificialIntelligencePromptType[],
   ) => {
     const ALLOCATION_ENDPOINT = `allocations`;
+    const APPLICATION_ENDPOINT = `applications`;
     const APPLICATION_ANALYSIS_ENDPOINT = `gia/application-analysis`;
 
-    const newAllocation = await geriapi.mutate(
-      ALLOCATION_ENDPOINT,
-      { ...allocation, creator: user?.id },
-      token,
-    );
+    const cleanedAllocationData = {
+      ...allocation,
+      applicationEmail: applicationByEmail ? allocation?.applicationEmail : null,
+      applicationURL: !applicationByEmail ? allocation?.applicationURL : null,
+    };
 
-    let newAnalysis = null;
+    const newAllocation = await geriapi.mutate(ALLOCATION_ENDPOINT, cleanedAllocationData, token);
+
+    let newApplication = null;
 
     if (!!newAllocation?.id) {
-      newAnalysis = await geriapi.mutate(
+      newApplication = await geriapi.mutate(
+        APPLICATION_ENDPOINT,
+        { ...application, allocation: newAllocation?.id },
+        token,
+      );
+    }
+
+    if (!!newApplication?.id) {
+      await geriapi.mutate(
         APPLICATION_ANALYSIS_ENDPOINT,
         {
           aiMessages: artificialIntelligencePrompt,
@@ -67,7 +81,7 @@ export function AllocationWithApplicationCreationForm({ user, token }: PropTypes
       );
     }
 
-    return newAnalysis;
+    return newApplication;
   };
   // ? CRUD - end
 
@@ -96,14 +110,14 @@ export function AllocationWithApplicationCreationForm({ user, token }: PropTypes
         user?.applicant?.curriculum as string,
       );
 
-      const newAnalysis = await generateArtificialIntelligenceAnalysis(
+      const newApplication = await handleArtificialIntelligenceApplicationAnalysisFlux(
         allocation,
         applicationData,
         artificialIntelligencePrompt,
       );
 
-      if (newAnalysis?.id) {
-        router.push(`/applicant/dashboard/application/${newAnalysis?.id}`);
+      if (newApplication?.id) {
+        router.push(`/applicant/dashboard/application/${newApplication?.id}`);
 
         return;
       }
@@ -128,6 +142,10 @@ export function AllocationWithApplicationCreationForm({ user, token }: PropTypes
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const changeApplicationByEmail = () => {
+    setApplicationByEmail((previousValue) => !previousValue);
   };
 
   return (
@@ -198,7 +216,12 @@ export function AllocationWithApplicationCreationForm({ user, token }: PropTypes
             )}
           />
 
-          <Flex width='100%' direction={{ base: 'column', md: 'row' }} gap='2rem'>
+          <Flex
+            gap='2rem'
+            width='100%'
+            direction={{ base: 'column', md: 'row' }}
+            align={{ base: 'flex-start', md: 'flex-end' }}
+          >
             <Controller
               name='company'
               control={control}
@@ -218,24 +241,58 @@ export function AllocationWithApplicationCreationForm({ user, token }: PropTypes
               )}
             />
 
-            <Controller
-              control={control}
-              name='applicationURL'
-              render={({ field: { onChange, value, name } }) => (
-                <FormControlWithLabel
-                  isRequired
-                  label='link de candidaturas'
-                  errorMessage={formErrors[name]?.message}
-                >
-                  <Input
-                    type='text'
-                    value={value}
-                    onChange={onChange}
-                    placeholder='https://vaganova.com/candidar'
-                  />
-                </FormControlWithLabel>
-              )}
-            />
+            <Box minWidth='fit-content' maxWidth='45%'>
+              <FormControlWithLabel
+                display='flex'
+                label={`candidaturas por ${applicationByEmail ? 'email' : 'link'}`}
+              >
+                <Switch onChange={changeApplicationByEmail} isChecked={applicationByEmail} />
+              </FormControlWithLabel>
+            </Box>
+          </Flex>
+
+          <Flex width='100%'>
+            {applicationByEmail ? (
+              <Controller
+                control={control}
+                name='applicationEmail'
+                render={({ field: { onChange, value, name } }) => (
+                  <FormControlWithLabel
+                    label='email de candidaturas'
+                    isRequired={applicationByEmail}
+                    errorMessage={formErrors[name]?.message}
+                  >
+                    <Input
+                      type='email'
+                      value={value}
+                      onChange={onChange}
+                      placeholder='candidaturas@email.com'
+                    />
+                  </FormControlWithLabel>
+                )}
+              />
+            ) : null}
+
+            {!applicationByEmail ? (
+              <Controller
+                control={control}
+                name='applicationURL'
+                render={({ field: { onChange, value, name } }) => (
+                  <FormControlWithLabel
+                    label='link de candidaturas'
+                    isRequired={!applicationByEmail}
+                    errorMessage={formErrors[name]?.message}
+                  >
+                    <Input
+                      type='text'
+                      value={value}
+                      onChange={onChange}
+                      placeholder='https://vaganova.com/candidar'
+                    />
+                  </FormControlWithLabel>
+                )}
+              />
+            ) : null}
           </Flex>
 
           <Button isLoading={isLoading} type='submit' width='100%'>

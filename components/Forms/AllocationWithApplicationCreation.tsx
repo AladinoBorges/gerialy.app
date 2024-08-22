@@ -5,7 +5,22 @@ import { AllocationType } from '@/types/allocation';
 import { ApplicationType } from '@/types/application';
 import { ArtificialIntelligencePromptType } from '@/types/gia';
 import { ReadUserType } from '@/types/user';
-import { Box, Button, Flex, Heading, Input, Switch, Textarea, useToast } from '@chakra-ui/react';
+import {
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  AlertTitle,
+  Box,
+  Button,
+  Flex,
+  Heading,
+  Input,
+  Radio,
+  RadioGroup,
+  Switch,
+  Textarea,
+  useToast,
+} from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
@@ -14,11 +29,12 @@ import { FormControlWithLabel } from './ControlWithLabel';
 interface PropTypes {
   token?: string;
   user?: ReadUserType;
+  curriculum: string | null;
 }
 
-export function AllocationWithApplicationCreationForm({ user, token }: PropTypes) {
+export function AllocationWithApplicationCreationForm({ user, token, curriculum }: PropTypes) {
   const [isLoading, setIsLoading] = useState(false);
-  const [applicationByEmail, setApplicationByEmail] = useState(false);
+  const [applicationMethod, setApplicationMethod] = useState('link');
 
   const toast = useToast();
   const router = useRouter();
@@ -54,8 +70,8 @@ export function AllocationWithApplicationCreationForm({ user, token }: PropTypes
 
     const cleanedAllocationData = {
       ...allocation,
-      applicationEmail: applicationByEmail ? allocation?.applicationEmail : null,
-      applicationURL: !applicationByEmail ? allocation?.applicationURL : null,
+      applicationEmail: applicationMethod === 'email' ? allocation?.applicationEmail : null,
+      applicationURL: applicationMethod === 'link' ? allocation?.applicationURL : null,
     };
 
     const newAllocation = await geriapi.mutate(ALLOCATION_ENDPOINT, cleanedAllocationData, token);
@@ -70,12 +86,12 @@ export function AllocationWithApplicationCreationForm({ user, token }: PropTypes
       );
     }
 
-    if (!!newApplication?.id) {
+    if (!!newApplication?.id && !!curriculum?.trim()) {
       await geriapi.mutate(
         APPLICATION_ANALYSIS_ENDPOINT,
         {
           aiMessages: artificialIntelligencePrompt,
-          application: { ...application, allocation: newAllocation?.id },
+          application: { id: newApplication?.id },
         },
         token,
       );
@@ -95,7 +111,6 @@ export function AllocationWithApplicationCreationForm({ user, token }: PropTypes
         applicantName: user?.name,
         applicantEmail: user?.email,
         applicant: user?.applicant?.id,
-        applicantCurriculum: user?.applicant?.curriculumURL,
         ...(!!processStages?.length
           ? {
               process: processStages?.map((stageItem) => {
@@ -107,7 +122,7 @@ export function AllocationWithApplicationCreationForm({ user, token }: PropTypes
 
       const artificialIntelligencePrompt = openAIMessages.applicationAnalysis(
         `${allocation?.name}\n${allocation?.description}`,
-        user?.applicant?.curriculum as string,
+        curriculum as string,
       );
 
       const newApplication = await handleArtificialIntelligenceApplicationAnalysisFlux(
@@ -144,13 +159,9 @@ export function AllocationWithApplicationCreationForm({ user, token }: PropTypes
     }
   };
 
-  const changeApplicationByEmail = () => {
-    setApplicationByEmail((previousValue) => !previousValue);
-  };
-
   return (
     <Flex direction='column' gap='2rem' width='100%'>
-      <Heading>analisar nova vaga</Heading>
+      <Heading>analisar nova candidatura</Heading>
 
       <form onSubmit={handleSubmit(handleSubmission)}>
         <Flex width='100%' gap='2rem' direction='column'>
@@ -216,12 +227,7 @@ export function AllocationWithApplicationCreationForm({ user, token }: PropTypes
             )}
           />
 
-          <Flex
-            gap='2rem'
-            width='100%'
-            direction={{ base: 'column', md: 'row' }}
-            align={{ base: 'flex-start', md: 'flex-end' }}
-          >
+          <Flex gap='2rem' width='100%' direction={{ base: 'column', md: 'row' }}>
             <Controller
               name='company'
               control={control}
@@ -241,25 +247,28 @@ export function AllocationWithApplicationCreationForm({ user, token }: PropTypes
               )}
             />
 
-            <Box minWidth='fit-content' maxWidth='45%'>
-              <FormControlWithLabel
-                display='flex'
-                label={`candidaturas por ${applicationByEmail ? 'email' : 'link'}`}
-              >
-                <Switch onChange={changeApplicationByEmail} isChecked={applicationByEmail} />
+            <Box minWidth='fit-content'>
+              <FormControlWithLabel label='método de candidatura'>
+                <RadioGroup onChange={setApplicationMethod} defaultValue={applicationMethod}>
+                  <Flex gap='1rem' paddingTop='0.4rem'>
+                    <Radio value='email'>email</Radio>
+                    <Radio value='link'>link</Radio>
+                  </Flex>
+                </RadioGroup>
+                {/* <Switch onChange={changeApplicationByEmail} isChecked={applicationByEmail} /> */}
               </FormControlWithLabel>
             </Box>
           </Flex>
 
           <Flex width='100%'>
-            {applicationByEmail ? (
+            {applicationMethod === 'email' ? (
               <Controller
                 control={control}
                 name='applicationEmail'
                 render={({ field: { onChange, value, name } }) => (
                   <FormControlWithLabel
                     label='email de candidaturas'
-                    isRequired={applicationByEmail}
+                    isRequired={applicationMethod === 'email'}
                     errorMessage={formErrors[name]?.message}
                   >
                     <Input
@@ -273,14 +282,14 @@ export function AllocationWithApplicationCreationForm({ user, token }: PropTypes
               />
             ) : null}
 
-            {!applicationByEmail ? (
+            {applicationMethod === 'link' ? (
               <Controller
                 control={control}
                 name='applicationURL'
                 render={({ field: { onChange, value, name } }) => (
                   <FormControlWithLabel
                     label='link de candidaturas'
-                    isRequired={!applicationByEmail}
+                    isRequired={applicationMethod === 'link'}
                     errorMessage={formErrors[name]?.message}
                   >
                     <Input
@@ -295,8 +304,30 @@ export function AllocationWithApplicationCreationForm({ user, token }: PropTypes
             ) : null}
           </Flex>
 
+          {!curriculum?.trim() ? (
+            <Alert
+              status='error'
+              flexDirection='column'
+              alignItems='center'
+              justifyContent='center'
+              textAlign='center'
+              height='200px'
+            >
+              <AlertIcon boxSize='40px' />
+
+              <AlertTitle mt={4} mb={1} fontSize='lg'>
+                o seu currículo não se encontra salvo no nosso banco de dados!
+              </AlertTitle>
+
+              <AlertDescription>
+                poderá salvar suas candidaturas mas não será feita a análise com a{' '}
+                <strong>gia</strong>, a nossa inteligência artificial.
+              </AlertDescription>
+            </Alert>
+          ) : null}
+
           <Button isLoading={isLoading} type='submit' width='100%'>
-            analisar
+            {!curriculum?.trim() ? 'guardar candidatura' : 'analisar candidatura'}
           </Button>
         </Flex>
       </form>

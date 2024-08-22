@@ -9,7 +9,7 @@ import secrets from './secrets';
 const DAYS_TO_ADD = 7;
 
 function handleSetCookie(key: string, data: string, expiresAt: Date) {
-  setCookie(`ger.ia.${key}`, data, {
+  setCookie(`gerialy_${key}`, data, {
     httpOnly: false,
     secure: true,
     sameSite: 'lax',
@@ -27,7 +27,7 @@ export const session = {
   },
 
   async getCookie(key: string, context = undefined) {
-    const targetCookie = cookieGetter(`ger.ia.${key}`);
+    const targetCookie = cookieGetter(`gerialy_${key}`);
 
     if (!targetCookie) {
       return null;
@@ -39,7 +39,7 @@ export const session = {
   },
 
   async updateCookie(key: string, context = undefined) {
-    const oldCookie = cookieGetter(`ger.ia.${key}`);
+    const oldCookie = cookieGetter(`gerialy_${key}`);
     const payload = await secrets.verify(oldCookie);
 
     if (!oldCookie || !payload) {
@@ -52,7 +52,7 @@ export const session = {
   },
 
   async eraseCookie(key: string) {
-    deleteCookie(`ger.ia.${key}`);
+    deleteCookie(`gerialy_${key}`);
 
     return true;
   },
@@ -91,12 +91,17 @@ export const session = {
       });
 
       const fullUser = await gerapi.get(`users/me?${populateQuery}`, jwt);
+      delete fullUser?.applicant?.curriculum;
 
       if (!!fullUser?.id) {
         const { role = null, applicant = null } = fullUser;
         const userRole = role?.name || 'applicant';
 
-        this.createCookie({ ...user, role: role?.name || 'applicant', applicant }, 'session', jwt);
+        await this.createCookie(
+          { ...user, role: role?.name || 'applicant', applicant },
+          'session',
+          jwt,
+        );
 
         return `/${userRole}/dashboard/new`;
       }

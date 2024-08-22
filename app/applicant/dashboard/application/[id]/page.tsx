@@ -3,7 +3,6 @@
 import { QueryApplicationType } from '@/types/application';
 import { IDType } from '@/types/generic';
 import {
-  Button,
   Center,
   Divider,
   Flex,
@@ -71,12 +70,10 @@ export default function AnalysisResumePage({ params: { id } }: PropTypes) {
 
           {application?.analysedByIA ? (
             <Stat textAlign='end'>
-              <StatNumber>{application?.positionCompatibility}/1</StatNumber>
+              <StatNumber>{application?.positionCompatibility}%</StatNumber>
               <StatLabel>compatível</StatLabel>
             </Stat>
-          ) : (
-            <Button>analisar</Button>
-          )}
+          ) : null}
         </Flex>
 
         <Divider />

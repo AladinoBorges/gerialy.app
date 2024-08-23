@@ -58,7 +58,7 @@ export function AllocationWithApplicationCreationForm({ user, token, curriculum 
       name: '',
       openPositions: 1,
       company: '',
-      creator: user?.id,
+      openedBy: user?.id,
     },
   });
 

@@ -10,6 +10,7 @@ export interface UserType {
   name?: string;
   applicant?: ReadApplicantType;
   applicantID?: IDType;
+  demoCoins?: number;
 }
 
 export interface ReadUserType extends UserType {

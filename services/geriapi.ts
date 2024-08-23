@@ -1,7 +1,7 @@
 const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/api`;
 
 const geriapi = {
-  async mutate(route: string, data: {}, token?: string) {
+  async mutate(route: string, data: {}, token?: string, method = 'POST') {
     if (!Object?.keys(data)?.length) {
       return null;
     }
@@ -9,7 +9,7 @@ const geriapi = {
     const targetURL = `${API_URL}/${route?.toLowerCase()}`;
 
     const result = await fetch(targetURL, {
-      method: 'POST',
+      method,
       body: JSON.stringify({ data }),
       headers: {
         Accept: 'application/json',

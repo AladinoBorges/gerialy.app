@@ -56,7 +56,7 @@ export function UserLoginForm() {
               priority
               width={135}
               height={42.5}
-              alt='geria beta logo'
+              alt='gerialy beta logo'
               src='/gia_beta_logo.png'
             />
           </Link>

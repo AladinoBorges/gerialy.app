@@ -17,7 +17,7 @@ export default async function middleware(request: NextRequest) {
   );
 
   // 2. Decrypt the session from the raw cookie
-  const rawCookies = cookies().get('ger.ia.session')?.value;
+  const rawCookies = cookies().get('gerialy_session')?.value;
   const sessionCookies = await secrets.verify(rawCookies);
   const user = sessionCookies?.user;
 
@@ -28,7 +28,7 @@ export default async function middleware(request: NextRequest) {
 
   // 4. Redirect to the target user role /dashboard if the user is authenticated
   if (isCurrentPathPublic && !!user?.id && !currentPathname.includes('/dashboard')) {
-    return NextResponse.redirect(new URL(`/${user?.role}/dashboard/new`, request.nextUrl));
+    return NextResponse.redirect(new URL(`/${user?.role}/dashboard`, request.nextUrl));
   }
 
   return NextResponse.next();

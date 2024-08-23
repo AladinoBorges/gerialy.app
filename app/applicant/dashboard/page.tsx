@@ -66,14 +66,16 @@ export default function DashboardPage() {
                 <Card variant='elevated' height='100%'>
                   <CardBody alignContent='center'>
                     <Text>
-                      {`#${applicationItem?.attributes?.allocation?.data?.id} | ${applicationItem?.attributes?.allocation?.data?.attributes?.name}`}
+                      {`${applicationItem?.attributes?.allocation?.data?.attributes?.name} | #${applicationItem?.attributes?.allocation?.data?.id} `}
                     </Text>
                   </CardBody>
 
                   <Divider />
 
                   <CardFooter justify='space-between'>
-                    <Text>{`#${applicationItem?.id}`}</Text>
+                    <Text>{`#${applicationItem?.id} ${
+                      applicationItem?.attributes?.analysedByIA ? '| analisada' : ''
+                    }`}</Text>
 
                     <Text>{new Date(dynamicUpdateDate)?.toLocaleDateString('pt')}</Text>
                   </CardFooter>

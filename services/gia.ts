@@ -20,7 +20,7 @@ export const openAIMessages = {
     }));
 
     serializedMessages.push({
-      role: 'assistent',
+      role: 'assistant',
       content: `hey gpt. analise por favor os dados da vaga e do meu currículo de candidato providenciados a seguir.
         - vaga: "${allocation}";
         - candidato: "${applicantCurriculum}".

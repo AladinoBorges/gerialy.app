@@ -9,7 +9,7 @@ const geriapi = {
     const targetURL = `${API_URL}/${route?.toLowerCase()}`;
 
     const result = await fetch(targetURL, {
-      method: 'POST',
+      method,
       body: JSON.stringify({ data }),
       headers: {
         Accept: 'application/json',

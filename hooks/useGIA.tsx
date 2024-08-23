@@ -2,16 +2,33 @@ import geriapi from '@/services/geriapi';
 import { openAIMessages } from '@/services/gia';
 import { AllocationType } from '@/types/allocation';
 import { IDType } from '@/types/generic';
+import { useQueryClient } from '@tanstack/react-query';
 import { useSharedData } from './useSharedData';
 
 export function useGIA(minimumNecessaryCoins = 4) {
-  const { wallet, token } = useSharedData();
+  const { wallet } = useSharedData();
+  const queryClient = useQueryClient();
 
   const analyseApplication = async (
     applicationID: IDType,
     allocation: AllocationType,
     curriculum: string,
+    token: string,
+    coinsToReduce = 0,
   ) => {
+    const currentCoins = wallet?.demoCoins - coinsToReduce;
+
+    if (!!coinsToReduce) {
+      await geriapi.mutate(
+        `wallets/${wallet?.id}`,
+        { demoCoins: wallet?.demoCoins - coinsToReduce },
+        token,
+        'PUT',
+      );
+
+      queryClient.invalidateQueries({ queryKey: ['fullUser'] });
+    }
+
     if (wallet?.demoCoins < minimumNecessaryCoins) {
       throw new Error(
         `são necessários pelo menos ${minimumNecessaryCoins} cŕeditos para analisar a candidatura. recarregue a sua conta para continuar!`,
@@ -31,29 +48,27 @@ export function useGIA(minimumNecessaryCoins = 4) {
       curriculum,
     );
 
-    /* const newAnalysedApplication = await geriapi.mutate(
+    const newAnalysedApplication = await geriapi.mutate(
       APPLICATION_ANALYSIS_ENDPOINT,
       {
         aiMessages: artificialIntelligencePrompt,
         application: { id: applicationID },
       },
       token,
-    ); */
+    );
 
-    const stop = true;
-
-    console.log(token);
-
-    if (stop) {
-      geriapi.mutate(
+    if (!!newAnalysedApplication?.id) {
+      await geriapi.mutate(
         `wallets/${wallet?.id}`,
-        { demoCoins: wallet?.demoCoins - minimumNecessaryCoins },
+        { demoCoins: currentCoins - minimumNecessaryCoins },
         token,
         'PUT',
       );
+
+      queryClient.invalidateQueries({ queryKey: ['fullUser'] });
     }
 
-    return stop;
+    return newAnalysedApplication;
   };
 
   return { analyseApplication };

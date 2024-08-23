@@ -62,9 +62,10 @@ export default function AnalysisResumePage({ params: { id } }: PropTypes) {
       setIsLoading(true);
 
       const result = await analyseApplication(
-        application?.id as string,
+        application?.id as IDType,
         application?.allocation?.data?.attributes as AllocationType,
         application?.attributes?.applicant?.data?.attributes?.curriculum as string,
+        sessionCookie?.token as string,
       );
 
       return result;
@@ -147,9 +148,7 @@ export default function AnalysisResumePage({ params: { id } }: PropTypes) {
                 <div
                   id='ia-analysis-content'
                   dangerouslySetInnerHTML={{
-                    __html: application?.automatedAnalysisFromIA
-                      ?.trim()
-                      ?.replace(/(<? *script)/gi, 'illegalscript'),
+                    __html: application?.automatedAnalysisFromIA?.trim(),
                   }}
                 />
 

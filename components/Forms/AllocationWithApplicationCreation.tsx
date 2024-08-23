@@ -1,3 +1,4 @@
+import { useGIA } from '@/hooks/useGIA';
 import { useSharedData } from '@/hooks/useSharedData';
 import { calculator } from '@/services/calculator';
 import geriapi from '@/services/geriapi';
@@ -22,6 +23,7 @@ import {
   Textarea,
   useToast,
 } from '@chakra-ui/react';
+import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
@@ -40,6 +42,8 @@ export function AllocationWithApplicationCreationForm({ user, token, curriculum 
   const toast = useToast();
   const router = useRouter();
   const { wallet } = useSharedData();
+  const { analyseApplication } = useGIA();
+  const queryClient = useQueryClient();
 
   const {
     control,
@@ -74,9 +78,9 @@ export function AllocationWithApplicationCreationForm({ user, token, curriculum 
       );
     }
 
+    let coinsToReduce = 0;
     const ALLOCATION_ENDPOINT = `allocations`;
     const APPLICATION_ENDPOINT = `applications`;
-    const APPLICATION_ANALYSIS_ENDPOINT = `gia/application-analysis`;
 
     const cleanedAllocationData = {
       ...allocation,
@@ -84,11 +88,18 @@ export function AllocationWithApplicationCreationForm({ user, token, curriculum 
       applicationURL: applicationMethod === 'link' ? allocation?.applicationURL : null,
     };
 
-    const newAllocation = await geriapi.mutate(ALLOCATION_ENDPOINT, cleanedAllocationData, token);
+    const newAllocation = await geriapi
+      .mutate(ALLOCATION_ENDPOINT, cleanedAllocationData, token)
+      ?.then((response) => {
+        return { ...response, ...response?.attributes };
+      });
 
     let newApplication = null;
+    let newAnalysis = null;
 
     if (!!newAllocation?.id) {
+      coinsToReduce += 1;
+
       newApplication = await geriapi.mutate(
         APPLICATION_ENDPOINT,
         { ...application, allocation: newAllocation?.id },
@@ -97,24 +108,16 @@ export function AllocationWithApplicationCreationForm({ user, token, curriculum 
     }
 
     if (!!newApplication?.id && !!curriculum?.trim()) {
-      await geriapi.mutate(
-        APPLICATION_ANALYSIS_ENDPOINT,
-        {
-          aiMessages: artificialIntelligencePrompt,
-          application: { id: newApplication?.id },
-        },
-        token,
-      );
-
-      geriapi.mutate(
-        `/wallets/${wallet?.id}`,
-        { demoCoins: wallet?.demoCoins - minimumNecessaryCoins },
-        token,
-        'PUT',
+      newAnalysis = await analyseApplication(
+        newApplication?.id,
+        newAllocation,
+        curriculum,
+        token as string,
+        coinsToReduce + 1,
       );
     }
 
-    return newApplication;
+    return newAnalysis || newApplication;
   };
   // ? CRUD - end
 

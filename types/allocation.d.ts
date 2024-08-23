@@ -16,7 +16,7 @@ export enum AllocationStatusEnum {
 export interface AllocationType {
   name?: string;
   description?: string;
-  creator?: UserType | IDType;
+  openedBy?: IDType | UserType;
   isPublic?: boolean;
   company?: string;
   companyImageUrl?: string;

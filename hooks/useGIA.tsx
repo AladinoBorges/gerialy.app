@@ -66,6 +66,7 @@ export function useGIA(minimumNecessaryCoins = 4) {
       );
 
       queryClient.invalidateQueries({ queryKey: ['fullUser'] });
+      queryClient.invalidateQueries({ queryKey: ['applicationByID'] });
     }
 
     return newAnalysedApplication;

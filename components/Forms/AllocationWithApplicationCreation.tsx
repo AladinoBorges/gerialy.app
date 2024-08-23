@@ -2,10 +2,8 @@ import { useGIA } from '@/hooks/useGIA';
 import { useSharedData } from '@/hooks/useSharedData';
 import { calculator } from '@/services/calculator';
 import geriapi from '@/services/geriapi';
-import { openAIMessages } from '@/services/gia';
 import { AllocationType } from '@/types/allocation';
 import { ApplicationType } from '@/types/application';
-import { ArtificialIntelligencePromptType } from '@/types/gia';
 import { ReadUserType } from '@/types/user';
 import {
   Alert,
@@ -68,7 +66,6 @@ export function AllocationWithApplicationCreationForm({ user, token, curriculum 
   const handleArtificialIntelligenceApplicationAnalysisFlux = async (
     allocation: AllocationType,
     application: ApplicationType,
-    artificialIntelligencePrompt: ArtificialIntelligencePromptType[],
   ) => {
     const minimumNecessaryCoins = 6;
 
@@ -140,15 +137,9 @@ export function AllocationWithApplicationCreationForm({ user, token, curriculum 
           : {}),
       };
 
-      const artificialIntelligencePrompt = openAIMessages.applicationAnalysis(
-        `${allocation?.name}\n${allocation?.description}`,
-        curriculum as string,
-      );
-
       const newApplication = await handleArtificialIntelligenceApplicationAnalysisFlux(
         allocation,
         applicationData,
-        artificialIntelligencePrompt,
       );
 
       if (newApplication?.id) {

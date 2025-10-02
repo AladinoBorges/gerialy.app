@@ -1,8 +1,9 @@
+import { ImagePropTypes } from '@/types/generic';
 import { Box } from '@chakra-ui/react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-export function ClickableLogo({ width = 108, height = 34 }) {
+export function ClickableLogo({ width, height }: ImagePropTypes) {
   return (
     <Box>
       <Link href='/'>

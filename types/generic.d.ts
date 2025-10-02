@@ -13,3 +13,8 @@ export interface DashboardNavigationPropTypes extends BaseComponentPropTypes {
 export type FormInputEventType = FormEvent<HTMLInputElement>;
 
 export type FormChangeEventHandlerType = ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
+
+export interface ImagePropTypes {
+  width: number;
+  height: number;
+}

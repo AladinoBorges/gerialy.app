@@ -1,0 +1,7 @@
+[
+  { "label": "marketplace", "href": "/marketplace" },
+  { "label": "projects", "href": "/projects" },
+  { "label": "about us", "href": "/about" },
+  { "label": "legal", "href": "/legal" },
+  { "label": "mAIn", "href": "/makes-nothing-ai" }
+]

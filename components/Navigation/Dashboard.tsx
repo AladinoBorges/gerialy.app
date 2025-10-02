@@ -6,20 +6,12 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { ClickableLogo } from '../Branding/ClickableLogo';
 import { GenericModal } from '../Modals/Generic';
+import links from './links.json';
 
 export function DashboardNavigation({ isLogged, children }: DashboardNavigationPropTypes) {
   const [isLoading, setIsLoading] = useState(false);
-  const links = [
-    { label: 'about us', href: '/about' },
-    { label: 'legal', href: '/legal' },
-    { label: 'roadmap', href: '/roadmap' },
-    { label: 'projects', href: '/projects' },
-    { label: 'marketplace', href: '/marketplace' },
-    { label: 'mAIn', href: '/makes-nothing-ai' },
-  ];
 
   const router = useRouter();
-
   const logoutDisclosures = useDisclosure();
 
   const startLogoutProcess = () => {
@@ -35,14 +27,13 @@ export function DashboardNavigation({ isLogged, children }: DashboardNavigationP
   };
 
   return (
-    <Flex width='100%' minHeight='100vh' gap='2rem' direction='column'>
+    <Flex maxWidth='1440px' minHeight='100vh' direction='column' marginX='auto'>
       <HStack
         spacing='1rem'
         justify='space-between'
-        borderBottom='1px solid gray'
-        padding={{ base: '1.25rem 1rem', md: '1.25rem 4rem' }}
+        padding={{ base: '1.25rem 1rem', md: '1rem 4rem' }}
       >
-        <ClickableLogo />
+        <ClickableLogo width={108} height={34} />
 
         <HStack spacing='1.5rem'>
           {links.map(({ label, href }, index) => (
@@ -63,7 +54,7 @@ export function DashboardNavigation({ isLogged, children }: DashboardNavigationP
         width='100%'
         maxWidth='1440px'
         marginX='auto'
-        padding={{ base: '4rem 1rem', md: '8rem 4rem' }}
+        padding={isLogged ? { base: '4rem 1rem', md: '8rem 4rem' } : {}}
       >
         {children}
       </Flex>

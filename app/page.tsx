@@ -7,7 +7,7 @@ import { Center } from '@chakra-ui/react';
 export default function Home() {
   return (
     <DashboardNavigation isLogged={false}>
-      <Center height='100vh' flexDirection='column'>
+      <Center height='90vh' flexDirection='column'>
         <HeroHeader />
       </Center>
     </DashboardNavigation>

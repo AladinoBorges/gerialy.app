@@ -1,6 +1,5 @@
-import { useSharedData } from '@/hooks/useSharedData';
 import { session } from '@/services/session';
-import { BaseComponentPropTypes } from '@/types/generic';
+import { DashboardNavigationPropTypes } from '@/types/generic';
 import { Button, ButtonGroup, Flex, HStack, Text, useDisclosure } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -8,10 +7,16 @@ import { useState } from 'react';
 import { ClickableLogo } from '../Branding/ClickableLogo';
 import { GenericModal } from '../Modals/Generic';
 
-export function DashboardNavigation({ children }: BaseComponentPropTypes) {
+export function DashboardNavigation({ isLogged, children }: DashboardNavigationPropTypes) {
   const [isLoading, setIsLoading] = useState(false);
-
-  const { wallet } = useSharedData();
+  const links = [
+    { label: 'about us', href: '/about' },
+    { label: 'legal', href: '/legal' },
+    { label: 'roadmap', href: '/roadmap' },
+    { label: 'projects', href: '/projects' },
+    { label: 'marketplace', href: '/marketplace' },
+    { label: 'mAIn', href: '/makes-nothing-ai' },
+  ];
 
   const router = useRouter();
 
@@ -40,19 +45,17 @@ export function DashboardNavigation({ children }: BaseComponentPropTypes) {
         <ClickableLogo />
 
         <HStack spacing='1.5rem'>
-          <Link href='/applicant/dashboard'>
-            <Text>minhas candidaturas</Text>
-          </Link>
+          {links.map(({ label, href }, index) => (
+            <Link href={href} key={index}>
+              <Text>{label}</Text>
+            </Link>
+          ))}
 
-          <Link href='/applicant/dashboard/new'>
-            <Text>+ nova análise</Text>
-          </Link>
-
-          <Button variant='outline' onClick={startLogoutProcess}>
-            sair
-          </Button>
-
-          <Text cursor='default'>{`${wallet?.demoCoins || 0} créditos`}</Text>
+          {isLogged ? (
+            <Button variant='outline' onClick={startLogoutProcess}>
+              logout
+            </Button>
+          ) : null}
         </HStack>
       </HStack>
 
@@ -67,17 +70,17 @@ export function DashboardNavigation({ children }: BaseComponentPropTypes) {
 
       {logoutDisclosures?.isOpen ? (
         <GenericModal
-          title='deseja sair da aplicação?'
+          title='do you want to leave?'
           isOpen={logoutDisclosures?.isOpen}
           onClose={logoutDisclosures?.onClose}
         >
           <ButtonGroup>
             <Button isLoading={isLoading} onClick={handleLogout}>
-              sim
+              yes
             </Button>
 
             <Button isLoading={isLoading} variant='outline' onClick={logoutDisclosures?.onClose}>
-              não
+              no
             </Button>
           </ButtonGroup>
         </GenericModal>

@@ -24,7 +24,7 @@ export function HeroHeader() {
           display={{ base: 'block', lg: 'inline' }}
           bgGradient='linear(to-r, gray.400,blue.500)'
         >
-          what can you build
+          what you can build
         </Text>
         <Text>with a team that dares to dream.</Text>
       </chakra.h1>
@@ -36,7 +36,7 @@ export function HeroHeader() {
         paddingX={{ base: 2, lg: 24 }}
         fontSize={{ base: 'lg', md: 'xl' }}
       >
-        {`we're a software house that refuses to see the world with the same eyes that everyone else uses. founded by aladino borges, our mission is to help you turn your ideas into reality with cutting-edge technology, artificial intelligence and a passion for innovation.`}
+        {`we are a software house that sees the world through a unique lens. founded by aladino borges, our mission is to transform your ideas into reality using cutting-edge technology, artificial intelligence, and a passion for innovation.`}
       </chakra.p>
 
       <Stack

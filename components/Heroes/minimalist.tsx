@@ -1,6 +1,6 @@
 import { Box, Button, chakra, Icon, Stack, Text } from '@chakra-ui/react';
 
-export function HeroHeader() {
+export function MinimalistHeroHeader() {
   return (
     <Box
       textAlign={{ base: 'left', md: 'center' }}

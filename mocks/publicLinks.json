@@ -3,5 +3,6 @@
   { "label": "projects", "href": "/projects" },
   { "label": "about us", "href": "/about" },
   { "label": "legal", "href": "/legal" },
-  { "label": "mAIn", "href": "/makes-nothing-ai" }
+  { "label": "mAIn", "href": "/makes-nothing-ai" },
+  { "label": ".", "href": "./" }
 ]

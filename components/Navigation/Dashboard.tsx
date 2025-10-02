@@ -4,9 +4,9 @@ import { Button, ButtonGroup, Flex, HStack, Text, useDisclosure } from '@chakra-
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import publicLinks from '../../mocks/publicLinks.json';
 import { ClickableLogo } from '../Branding/ClickableLogo';
 import { GenericModal } from '../Modals/Generic';
-import links from './links.json';
 
 export function DashboardNavigation({ isLogged, children }: DashboardNavigationPropTypes) {
   const [isLoading, setIsLoading] = useState(false);
@@ -36,7 +36,7 @@ export function DashboardNavigation({ isLogged, children }: DashboardNavigationP
         <ClickableLogo width={108} height={34} />
 
         <HStack spacing='1.5rem'>
-          {links.map(({ label, href }, index) => (
+          {publicLinks.map(({ label, href }, index) => (
             <Link href={href} key={index}>
               <Text>{label}</Text>
             </Link>

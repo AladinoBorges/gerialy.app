@@ -4,8 +4,9 @@ const handleWebpackConfiguration = (configuration, { dev, isServer }) => {
   if (!isServer) {
     Object.assign(configuration.resolve.alias, {
       react: "preact/compat",
+      "react-dom": "preact/compat",
       "react-dom/test-utils": "preact/test-utils",
-      "react-dom": "preact/compat"
+      "react/jsx-runtime.js": "preact/compat/jsx-runtime"
     });
   }
 

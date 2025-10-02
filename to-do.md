@@ -1,5 +1,5 @@
 - [] homepage: a minimalist japanese style hero page;
-- [] easter egg one [main]: a "makes nothing" AI page with 13 products ranging from $3.99 to $99.999,99;
+- [] easter egg one {main}: a "makes nothing" AI page with 13 products ranging from $3.99 to $99.999,99;
 - [] marketplace: brazilian marketplace for [it's a project secret for now];
 - [] about us: a page that serves as portfolio for all gerialy's founding team members;
 - [] legal: a simple page that describes all gerialy's responsibilities and usage terms;

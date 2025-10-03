@@ -1,13 +1,12 @@
 import { session } from '@/services/session';
 import { DashboardNavigationPropTypes } from '@/types/generic';
-import { Button, ButtonGroup, Flex, HStack, Text, useDisclosure } from '@chakra-ui/react';
-import Link from 'next/link';
+import { Button, ButtonGroup, Flex, HStack, useDisclosure } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import publicLinks from '../../mocks/publicLinks.json';
 import BrowserTabHead from '../Branding/BrowserTabHead';
 import { ClickableLogo } from '../Branding/ClickableLogo';
 import { GenericModal } from '../Modals/Generic';
+import MobileNavigationMenu from './MobileNavigationMenu';
 
 export function DashboardNavigation({
   isLogged,
@@ -42,19 +41,7 @@ export function DashboardNavigation({
       >
         <ClickableLogo width={108} height={34} />
 
-        <HStack spacing='1.5rem'>
-          {publicLinks.map(({ label, href }, index) => (
-            <Link href={href} key={index}>
-              <Text>{label}</Text>
-            </Link>
-          ))}
-
-          {isLogged ? (
-            <Button variant='outline' onClick={startLogoutProcess}>
-              logout
-            </Button>
-          ) : null}
-        </HStack>
+        <MobileNavigationMenu startLogoutProcess={startLogoutProcess} />
       </HStack>
 
       <Flex

@@ -6,7 +6,7 @@ import { Center } from '@chakra-ui/react';
 
 export default function Home() {
   return (
-    <DashboardNavigation isLogged={false}>
+    <DashboardNavigation isLogged={false} complementaryHeader='software house by falbor'>
       <Center height='90vh' flexDirection='column'>
         <MinimalistHeroHeader />
       </Center>

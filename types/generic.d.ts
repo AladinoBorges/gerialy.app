@@ -7,6 +7,7 @@ export interface BaseComponentPropTypes {
 }
 
 export interface DashboardNavigationPropTypes extends BaseComponentPropTypes {
+  complementaryHeader: string;
   isLogged: boolean;
 }
 

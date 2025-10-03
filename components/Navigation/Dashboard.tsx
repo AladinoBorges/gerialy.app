@@ -5,10 +5,15 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import publicLinks from '../../mocks/publicLinks.json';
+import BrowserTabHead from '../Branding/BrowserTabHead';
 import { ClickableLogo } from '../Branding/ClickableLogo';
 import { GenericModal } from '../Modals/Generic';
 
-export function DashboardNavigation({ isLogged, children }: DashboardNavigationPropTypes) {
+export function DashboardNavigation({
+  isLogged,
+  complementaryHeader,
+  children,
+}: DashboardNavigationPropTypes) {
   const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
@@ -28,6 +33,8 @@ export function DashboardNavigation({ isLogged, children }: DashboardNavigationP
 
   return (
     <Flex maxWidth='1440px' minHeight='100vh' direction='column' marginX='auto'>
+      <BrowserTabHead complementaryHeader={complementaryHeader} />
+
       <HStack
         spacing='1rem'
         justify='space-between'

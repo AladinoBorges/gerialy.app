@@ -1,20 +1,17 @@
-import { useSharedData } from '@/hooks/useSharedData';
 import { session } from '@/services/session';
-import { BaseComponentPropTypes } from '@/types/generic';
+import { DashboardNavigationPropTypes } from '@/types/generic';
 import { Button, ButtonGroup, Flex, HStack, Text, useDisclosure } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import publicLinks from '../../mocks/publicLinks.json';
 import { ClickableLogo } from '../Branding/ClickableLogo';
 import { GenericModal } from '../Modals/Generic';
 
-export function DashboardNavigation({ children }: BaseComponentPropTypes) {
+export function DashboardNavigation({ isLogged, children }: DashboardNavigationPropTypes) {
   const [isLoading, setIsLoading] = useState(false);
 
-  const { wallet } = useSharedData();
-
   const router = useRouter();
-
   const logoutDisclosures = useDisclosure();
 
   const startLogoutProcess = () => {
@@ -30,29 +27,26 @@ export function DashboardNavigation({ children }: BaseComponentPropTypes) {
   };
 
   return (
-    <Flex width='100%' minHeight='100vh' gap='2rem' direction='column'>
+    <Flex maxWidth='1440px' minHeight='100vh' direction='column' marginX='auto'>
       <HStack
         spacing='1rem'
         justify='space-between'
-        borderBottom='1px solid gray'
-        padding={{ base: '1.25rem 1rem', md: '1.25rem 4rem' }}
+        padding={{ base: '1.25rem 1rem', md: '1rem 4rem' }}
       >
-        <ClickableLogo />
+        <ClickableLogo width={108} height={34} />
 
         <HStack spacing='1.5rem'>
-          <Link href='/applicant/dashboard'>
-            <Text>minhas candidaturas</Text>
-          </Link>
+          {publicLinks.map(({ label, href }, index) => (
+            <Link href={href} key={index}>
+              <Text>{label}</Text>
+            </Link>
+          ))}
 
-          <Link href='/applicant/dashboard/new'>
-            <Text>+ nova análise</Text>
-          </Link>
-
-          <Button variant='outline' onClick={startLogoutProcess}>
-            sair
-          </Button>
-
-          <Text cursor='default'>{`${wallet?.demoCoins || 0} créditos`}</Text>
+          {isLogged ? (
+            <Button variant='outline' onClick={startLogoutProcess}>
+              logout
+            </Button>
+          ) : null}
         </HStack>
       </HStack>
 
@@ -60,24 +54,24 @@ export function DashboardNavigation({ children }: BaseComponentPropTypes) {
         width='100%'
         maxWidth='1440px'
         marginX='auto'
-        padding={{ base: '4rem 1rem', md: '8rem 4rem' }}
+        padding={isLogged ? { base: '4rem 1rem', md: '8rem 4rem' } : {}}
       >
         {children}
       </Flex>
 
       {logoutDisclosures?.isOpen ? (
         <GenericModal
-          title='deseja sair da aplicação?'
+          title='do you want to leave?'
           isOpen={logoutDisclosures?.isOpen}
           onClose={logoutDisclosures?.onClose}
         >
           <ButtonGroup>
             <Button isLoading={isLoading} onClick={handleLogout}>
-              sim
+              yes
             </Button>
 
             <Button isLoading={isLoading} variant='outline' onClick={logoutDisclosures?.onClose}>
-              não
+              no
             </Button>
           </ButtonGroup>
         </GenericModal>

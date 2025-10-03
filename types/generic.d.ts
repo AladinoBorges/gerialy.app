@@ -6,13 +6,15 @@ export interface BaseComponentPropTypes {
   children: ReactNode;
 }
 
+export interface DashboardNavigationPropTypes extends BaseComponentPropTypes {
+  isLogged: boolean;
+}
+
 export type FormInputEventType = FormEvent<HTMLInputElement>;
 
 export type FormChangeEventHandlerType = ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
 
-export interface DynamicPagesBasePropTypes {
-  params: {
-    id: string;
-    role: string;
-  };
+export interface ImagePropTypes {
+  width: number;
+  height: number;
 }

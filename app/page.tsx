@@ -1,12 +1,15 @@
 'use client';
 
-import { UserLoginForm } from '@/components/Forms/UserLogin';
+import { MinimalistHeroHeader } from '@/components/Heroes/minimalist';
+import { DashboardNavigation } from '@/components/Navigation/Dashboard';
 import { Center } from '@chakra-ui/react';
 
 export default function Home() {
   return (
-    <Center height='100vh' flexDirection='column'>
-      <UserLoginForm />
-    </Center>
+    <DashboardNavigation isLogged={false}>
+      <Center height='90vh' flexDirection='column'>
+        <MinimalistHeroHeader />
+      </Center>
+    </DashboardNavigation>
   );
 }

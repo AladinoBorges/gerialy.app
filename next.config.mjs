@@ -3,6 +3,7 @@
 const handleWebpackConfiguration = (configuration, { dev, isServer }) => {
   if (!isServer) {
     Object.assign(configuration.resolve.alias, {
+      ...(configuration.resolve.alias || {}),
       react: "preact/compat",
       "react-dom": "preact/compat",
       "react-dom/test-utils": "preact/test-utils",

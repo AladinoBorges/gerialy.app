@@ -14,7 +14,6 @@ const handleWebpackConfiguration = (configuration, { dev, isServer }) => {
 };
 
 const nextConfig = {
-  output: "standalone",
   reactStrictMode: true,
   webpack: handleWebpackConfiguration
 };

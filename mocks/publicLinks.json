@@ -1,4 +1,5 @@
 [
+  { "label": "homepage", "href": "/" },
   { "label": "marketplace", "href": "/marketplace" },
   { "label": "projects", "href": "/projects" },
   { "label": "about us", "href": "/about" },

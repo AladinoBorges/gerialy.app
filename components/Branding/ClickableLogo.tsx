@@ -1,4 +1,4 @@
-import { Text } from '@chakra-ui/react';
+import { Text, TextProps } from '@chakra-ui/react';
 import { Questrial } from 'next/font/google';
 import Link from 'next/link';
 
@@ -22,10 +22,10 @@ const brandFont = Questrial({
   ],
 });
 
-export function ClickableLogo() {
+export function ClickableLogo(props: TextProps) {
   return (
     <Link href='/'>
-      <Text className={brandFont.className} fontSize='2.3rem'>
+      <Text className={brandFont.className} fontSize='2.3rem' {...props}>
         gerialy
       </Text>
     </Link>

@@ -1,3 +1,4 @@
+import appPublicUrls from '@/mocks/appPublicUrls';
 import { session } from '@/services/session';
 import {
   Button,
@@ -15,17 +16,7 @@ import {
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import { Fragment } from 'react';
-import { IconType } from 'react-icons';
-import {
-  HiMiniCpuChip,
-  HiOutlineBuildingStorefront,
-  HiOutlineCodeBracket,
-  HiOutlineHomeModern,
-  HiOutlinePuzzlePiece,
-  HiOutlineScale,
-  HiOutlineUserGroup,
-} from 'react-icons/hi2';
-import publicLinks from '../../mocks/publicLinks.json';
+import { HiMiniCpuChip } from 'react-icons/hi2';
 
 interface MobileNavigationMenuProps {
   startLogoutProcess: VoidFunction;
@@ -40,26 +31,16 @@ export default function MobileNavigationMenu({ startLogoutProcess }: MobileNavig
   const isLogged = Boolean(data);
   const isMobile = useBreakpointValue({ base: true, md: false });
 
-  const icons: { [key: string]: IconType } = {
-    homepage: HiOutlineHomeModern,
-    marketplace: HiOutlineBuildingStorefront,
-    projects: HiOutlineCodeBracket,
-    'about us': HiOutlineUserGroup,
-    legal: HiOutlineScale,
-    mAIn: HiOutlinePuzzlePiece,
-  };
-
   return isMobile ? (
     <Menu isLazy placement='auto'>
       <MenuButton as={IconButton} aria-label='Options' icon={<HiMiniCpuChip />} variant='outline' />
+
       <MenuList>
         <MenuGroup title='app'>
-          {publicLinks.map(({ label, href }, index) => {
-            const Icon = icons[label];
-
+          {appPublicUrls.map(({ label, href, LinkIcon }, index) => {
             return (
               <MenuItem
-                icon={<Icon />}
+                icon={<LinkIcon />}
                 key={index}
                 as={Link}
                 href={href}
@@ -86,15 +67,13 @@ export default function MobileNavigationMenu({ startLogoutProcess }: MobileNavig
     </Menu>
   ) : (
     <HStack spacing={0}>
-      {publicLinks.map(({ label, href }, index) => {
-        const Icon = icons[label];
-
+      {appPublicUrls.map(({ label, href, LinkIcon }, index) => {
         return (
           <Button
             as={Link}
             href={href}
             key={index}
-            leftIcon={<Icon />}
+            leftIcon={<LinkIcon />}
             variant='ghost'
             size='sm'
             isDisabled={!['homepage', 'mAIn'].includes(label)}

@@ -53,7 +53,7 @@ export default function MobileNavigationMenu({ startLogoutProcess }: MobileNavig
     <Menu isLazy placement='auto'>
       <MenuButton as={IconButton} aria-label='Options' icon={<HiMiniCpuChip />} variant='outline' />
       <MenuList>
-        <MenuGroup title='gerialy'>
+        <MenuGroup title='app'>
           {publicLinks.map(({ label, href }, index) => {
             const Icon = icons[label];
 

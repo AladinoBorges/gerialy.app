@@ -34,12 +34,8 @@ export function DashboardNavigation({
     <Flex maxWidth='1440px' minHeight='100vh' direction='column' marginX='auto'>
       <BrowserTabHead complementaryHeader={complementaryHeader} />
 
-      <HStack
-        spacing='1rem'
-        justify='space-between'
-        padding={{ base: '1.25rem 1rem', md: '1rem 4rem' }}
-      >
-        <ClickableLogo width={108} height={34} />
+      <HStack spacing='1rem' justify='space-between' paddingX={{ base: '1rem', md: '4rem' }}>
+        <ClickableLogo />
 
         <MobileNavigationMenu startLogoutProcess={startLogoutProcess} />
       </HStack>

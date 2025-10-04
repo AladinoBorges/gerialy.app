@@ -1,20 +1,33 @@
-import { ImagePropTypes } from '@/types/generic';
-import { Box } from '@chakra-ui/react';
-import Image from 'next/image';
+import { Text, TextProps } from '@chakra-ui/react';
+import { Questrial } from 'next/font/google';
 import Link from 'next/link';
 
-export function ClickableLogo({ width, height }: ImagePropTypes) {
+const brandFont = Questrial({
+  display: 'swap',
+  subsets: ['latin'],
+  weight: ['400'],
+  fallback: [
+    'Fredoka',
+    'Poppins',
+    'Quicksand',
+    'Questrial',
+    'Afacad',
+    'Afacad Flux',
+    'Cal Sans',
+    'Inclusive Sans',
+    'Parkinsans',
+    'Urbanist',
+    'Sulphur Point',
+    'sans-serif',
+  ],
+});
+
+export function ClickableLogo(props: TextProps) {
   return (
-    <Box>
-      <Link href='/'>
-        <Image
-          src='/gia_beta_logo.png'
-          alt='gerialy beta logo'
-          width={width}
-          height={height}
-          priority
-        />
-      </Link>
-    </Box>
+    <Link href='/'>
+      <Text className={brandFont.className} fontSize='2.3rem' {...props}>
+        gerialy
+      </Text>
+    </Link>
   );
 }

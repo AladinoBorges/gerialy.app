@@ -6,6 +6,7 @@ import { useState } from 'react';
 import BrowserTabHead from '../Branding/BrowserTabHead';
 import { ClickableLogo } from '../Branding/ClickableLogo';
 import { GenericModal } from '../Modals/Generic';
+import { AppFooter } from './Footer';
 import MobileNavigationMenu from './MobileNavigationMenu';
 
 export function DashboardNavigation({
@@ -71,6 +72,8 @@ export function DashboardNavigation({
           </ButtonGroup>
         </GenericModal>
       ) : null}
+
+      <AppFooter />
     </Flex>
   );
 }

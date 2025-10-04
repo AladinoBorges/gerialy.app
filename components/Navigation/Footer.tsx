@@ -24,7 +24,7 @@ export const AppFooter = () => {
         </Stack>
 
         <Text fontSize='sm' color='fg.muted'>
-          &copy; {new Date().getFullYear()} gerialy, Inc. MIT License GNU GPL V3.0.
+          &copy; {new Date().getFullYear()} gerialy, Inc. GNU GPL V3.0 License.
         </Text>
       </Stack>
     </Box>

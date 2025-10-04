@@ -1,13 +1,13 @@
 import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
+import appPublicUrls from './mocks/appPublicUrls';
 import protectedLinks from './mocks/protectedLinks.json';
-import publicLinks from './mocks/publicLinks.json';
 import secrets from './services/secrets';
 
 export default async function middleware(request: NextRequest) {
   const currentPathname = request.nextUrl.pathname;
 
-  const isCurrentPathPublic = publicLinks.some(({ href }) => currentPathname.includes(href));
+  const isCurrentPathPublic = appPublicUrls.some(({ href }) => currentPathname.includes(href));
   const isCurrentPathProtected = protectedLinks.some(({ href }) => currentPathname.includes(href));
 
   const rawCookies = cookies().get('gerialy_session')?.value;

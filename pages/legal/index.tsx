@@ -79,14 +79,14 @@ export default function LegalPage() {
               <strong>Acquisition of the Company:</strong> should FALBOR and its assets (including
               gerialy) be acquired by another entity, all users will be <strong>notified</strong> of
               the purchase and will be given the <strong>option to accept or reject</strong>{' '}
-              continuing to use the platforms' services under the new ownership.
+              continuing to use the platforms&apos; services under the new ownership.
             </ListItem>
 
             <ListItem>
               <strong>Data Retention for Internal Metrics:</strong> for the purpose of future
               metrics and internal business needs of the parent company (FALBOR),{' '}
               <strong>no information</strong> recorded in the webapps ecosystem databases is{' '}
-              <strong>permanently deleted</strong>. This data may be used for FALBOR's internal
+              <strong>permanently deleted</strong>. This data may be used for FALBOR&apos;s internal
               analysis and needs.
             </ListItem>
           </UnorderedList>
@@ -134,7 +134,7 @@ export default function LegalPage() {
               may provide this information, either <strong>publicly and free of charge</strong> or
               through internally defined <strong>subscriptions</strong>, when such information is
               defined as being of <strong>public and/or commercial interest</strong> according to
-              FALBOR's internal methodologies.
+              FALBOR&apos;s internal methodologies.
             </ListItem>
           </UnorderedList>
 
@@ -144,10 +144,11 @@ export default function LegalPage() {
 
           <UnorderedList paddingLeft='1.5rem' spacing='0.5rem'>
             <ListItem>
-              <strong>Definition of "User":</strong> both subscribers and data suppliers are
-              characterized as <strong>"Users"</strong> of the gerialy/FALBOR webapps ecosystem. The
-              difference lies in their roles - <strong>subscribers</strong> use the services, while{' '}
-              <strong>data suppliers</strong> provide information to be shared within the ecosystem.
+              <strong>Definition of &apos;User&apos;:</strong> both subscribers and data suppliers
+              are characterized as <strong>&apos;Users&apos;</strong> of the gerialy/FALBOR webapps
+              ecosystem. The difference lies in their roles - <strong>subscribers</strong> use the
+              services, while <strong>data suppliers</strong> provide information to be shared
+              within the ecosystem.
             </ListItem>
 
             <ListItem>

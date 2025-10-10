@@ -6,10 +6,10 @@ export default function Main() {
   const onBuyNow = () => {};
   const onAddToCart = () => {};
 
-  const productsList = new Array(18).fill(null);
+  const productsList = new Array(4).fill(null);
 
   return (
-    <DashboardNavigation isLogged={false} complementaryHeader='makes nothing ai'>
+    <DashboardNavigation isLogged={false} complementaryHeader='subscriptions'>
       <Flex
         alignItems='center'
         direction='column'
@@ -18,7 +18,9 @@ export default function Main() {
         padding={{ base: '4rem 0rem', md: '8rem 4rem' }}
       >
         <Heading as='h1' fontSize='1.3rem' fontWeight={500} textAlign='center'>
-          main, the artificial intelligence that makes nothing just to sell you something.
+          here, you can find some of the best subscription plans for your needs.
+          <br />
+          choose wisely and enjoy the benefits!
         </Heading>
 
         <Divider marginY={4} />

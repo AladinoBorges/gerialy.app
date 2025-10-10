@@ -37,14 +37,14 @@ export default function MobileNavigationMenu({ startLogoutProcess }: MobileNavig
 
       <MenuList>
         <MenuGroup title='app'>
-          {appPublicUrls.map(({ label, href, LinkIcon }, index) => {
+          {appPublicUrls.map(({ isDisabled, label, href, LinkIcon }, index) => {
             return (
               <MenuItem
                 icon={<LinkIcon />}
                 key={index}
                 as={Link}
                 href={href}
-                isDisabled={!['homepage', 'mAIn'].includes(label)}
+                isDisabled={isDisabled}
               >
                 {label}
               </MenuItem>
@@ -67,7 +67,7 @@ export default function MobileNavigationMenu({ startLogoutProcess }: MobileNavig
     </Menu>
   ) : (
     <HStack spacing={0}>
-      {appPublicUrls.map(({ label, href, LinkIcon }, index) => {
+      {appPublicUrls.map(({ isDisabled, label, href, LinkIcon }, index) => {
         return (
           <Button
             as={Link}
@@ -76,7 +76,7 @@ export default function MobileNavigationMenu({ startLogoutProcess }: MobileNavig
             leftIcon={<LinkIcon />}
             variant='ghost'
             size='sm'
-            isDisabled={!['homepage', 'mAIn'].includes(label)}
+            isDisabled={isDisabled}
           >
             <Text size='md'>{label}</Text>
           </Button>

@@ -1,6 +1,7 @@
 import { DashboardNavigation } from '@/components/Navigation/Dashboard';
 import { useTranslation } from '@/hooks/useTranslation';
 import {
+  Box,
   Button,
   Card,
   CardBody,
@@ -9,6 +10,7 @@ import {
   Flex,
   Heading,
   Icon,
+  Image,
   SimpleGrid,
   Stack,
   Text,
@@ -20,23 +22,31 @@ export default function ProjectsPage() {
 
   const projects = [
     {
-      name: 'huntly.com.br',
+      name: 'Huntly',
+      domain: 'huntly.com.br',
       url: 'https://huntly.com.br',
+      image: '/projects/huntly.webp',
       descKey: 'projects.huntly.desc',
     },
     {
-      name: 'prolicitante.com.br',
+      name: 'Pró Licitante',
+      domain: 'prolicitante.com.br',
       url: 'https://prolicitante.com.br',
+      image: '/projects/prolicitante.webp',
       descKey: 'projects.prolicitante.desc',
     },
     {
-      name: 'winddigital.com.br',
+      name: 'Wind Digital',
+      domain: 'winddigital.com.br',
       url: 'https://winddigital.com.br',
+      image: '/projects/winddigital.webp',
       descKey: 'projects.winddigital.desc',
     },
     {
-      name: 'devopness.com',
+      name: 'Devopness',
+      domain: 'devopness.com',
       url: 'https://devopness.com',
+      image: '/projects/devopness.webp',
       descKey: 'projects.devopness.desc',
     },
   ];
@@ -69,6 +79,7 @@ export default function ProjectsPage() {
             <Card
               key={project.name}
               borderRadius="lg"
+              overflow="hidden"
               variant="outline"
               bg="white"
               _dark={{ bg: 'gray.800', borderColor: 'gray.700' }}
@@ -77,11 +88,34 @@ export default function ProjectsPage() {
               flexDirection="column"
               justifyContent="space-between"
             >
+              <Box position="relative" paddingBottom="56.25%" width="100%" overflow="hidden">
+                <Image
+                  src={project.image}
+                  alt={project.name}
+                  objectFit="cover"
+                  position="absolute"
+                  top="0"
+                  left="0"
+                  width="100%"
+                  height="100%"
+                  borderBottom="1px solid"
+                  borderColor="gray.200"
+                  _dark={{ borderColor: 'gray.700' }}
+                  transition="transform 0.3s ease"
+                  _hover={{ transform: 'scale(1.03)' }}
+                />
+              </Box>
+
               <CardBody padding="6">
                 <Stack gap="3">
-                  <Heading as="h2" size="md" color="blue.600" _dark={{ color: 'blue.400' }}>
-                    {project.name}
-                  </Heading>
+                  <Stack gap="0">
+                    <Heading as="h2" size="md" color="blue.600" _dark={{ color: 'blue.400' }}>
+                      {project.name}
+                    </Heading>
+                    <Text fontSize="xs" color="gray.400" _dark={{ color: 'gray.500' }}>
+                      {project.domain}
+                    </Text>
+                  </Stack>
 
                   <Text fontSize="sm" color="gray.600" _dark={{ color: 'gray.300' }} textAlign="justify">
                     {t(project.descKey)}

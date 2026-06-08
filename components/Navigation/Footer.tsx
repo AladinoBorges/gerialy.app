@@ -8,8 +8,11 @@ import {
   HiOutlineUserGroup,
 } from 'react-icons/hi2';
 import { ClickableLogo } from '../Branding/ClickableLogo';
+import { useTranslation } from '@/hooks/useTranslation';
 
 export const AppFooter = () => {
+  const { t } = useTranslation();
+
   return (
     <Box as='footer' maxWidth='1440px' padding={{ base: '1rem', md: '4rem' }}>
       <Stack gap='1rem'>
@@ -33,29 +36,29 @@ export const AppFooter = () => {
 
         <Stack direction='row' justify='space-between' align='center'>
           <Text fontSize='sm' color='fg.muted'>
-            &copy; {new Date().getFullYear()} gerialy. GNU GPL V3.0 License.
+            {t('footer.copyright')}
           </Text>
 
           <HStack gap='4'>
-            <Tooltip label='about us'>
+            <Tooltip label={t('tooltip.about')}>
               <Link href='/about'>
                 <HiOutlineUserGroup size='1.3rem' />
               </Link>
             </Tooltip>
 
-            <Tooltip label='contacts'>
+            <Tooltip label={t('tooltip.contacts')}>
               <Link href='/contacts'>
                 <HiOutlineIdentification size='1.3rem' />
               </Link>
             </Tooltip>
 
-            <Tooltip label='terms and conditions'>
+            <Tooltip label={t('tooltip.legal')}>
               <Link href='/legal'>
                 <HiOutlineScale size='1.3rem' />
               </Link>
             </Tooltip>
 
-            <Tooltip label='privacy policy'>
+            <Tooltip label={t('tooltip.privacy')}>
               <Link href='/privacy'>
                 <HiOutlineFingerPrint size='1.3rem' />
               </Link>
@@ -64,11 +67,7 @@ export const AppFooter = () => {
         </Stack>
 
         <Text fontSize='xs' color='fg.muted' textAlign='center' marginTop='2rem'>
-          <strong>gerialy</strong> is a technology project developed by <strong>FALBOR</strong>, a
-          brazilian company registered under <strong>CNPJ nº 49.454.159/0001-75</strong>. Its
-          headquarters are located at{' '}
-          <strong>Avenida Imperatriz Leopoldina 1900, APT 154, Bloco 1, Pinheiro</strong>, in the
-          city of São Leopoldo/RS, with the postal code <strong>93042-082</strong>.
+          {t('footer.description')}
         </Text>
       </Stack>
     </Box>

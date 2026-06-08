@@ -10,7 +10,7 @@ export default async function middleware(request: NextRequest) {
   const isCurrentPathPublic = appPublicUrls.some(({ href }) => currentPathname.includes(href));
   const isCurrentPathProtected = protectedLinks.some(({ href }) => currentPathname.includes(href));
 
-  const rawCookies = cookies().get('gerialy_session')?.value;
+  const rawCookies = (await cookies()).get('gerialy_session')?.value;
   const sessionCookies = await secrets.verify(rawCookies);
   const user = sessionCookies?.user as { id: string; role: string } | null;
 

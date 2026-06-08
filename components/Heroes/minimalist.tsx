@@ -1,7 +1,11 @@
 import { Box, Button, chakra, Stack, Text } from '@chakra-ui/react';
 import { HiFlag, HiOutlineComputerDesktop } from 'react-icons/hi2';
+import { useTranslation } from '@/hooks/useTranslation';
+import Link from 'next/link';
 
 export function MinimalistHeroHeader() {
+  const { t } = useTranslation();
+
   return (
     <Box
       textAlign='center'
@@ -17,7 +21,7 @@ export function MinimalistHeroHeader() {
         fontSize={{ base: '1.6rem', md: '5xl' }}
         letterSpacing={{ base: 'normal', md: 'tight' }}
       >
-        imagine
+        {t('home.titlePrefix')}
         <br />
         <Text
           width='full'
@@ -26,9 +30,9 @@ export function MinimalistHeroHeader() {
           display={{ base: 'block', lg: 'inline' }}
           bgGradient='linear(to-r, gray.400,blue.500)'
         >
-          what you can build
+          {t('home.titleHighlight')}
         </Text>
-        <Text>with a team that dares to dream.</Text>
+        <Text>{t('home.titleSuffix')}</Text>
       </chakra.h1>
 
       <chakra.p
@@ -38,7 +42,7 @@ export function MinimalistHeroHeader() {
         paddingX={{ base: 2, lg: 24 }}
         fontSize={{ base: 'md', md: 'xl' }}
       >
-        {`we are a software house that sees the world through a unique lens. founded by aladino borges, our mission is to transform your ideas into reality using cutting-edge technology, artificial intelligence, and a passion for innovation.`}
+        {t('home.description')}
       </chakra.p>
 
       <Stack
@@ -48,9 +52,9 @@ export function MinimalistHeroHeader() {
         paddingX={{ base: '2rem', md: 0 }}
       >
         <Button
-          as='a'
+          as={Link}
+          href='/projects'
           size='lg'
-          isDisabled
           variant='solid'
           cursor='pointer'
           alignItems='center'
@@ -60,7 +64,7 @@ export function MinimalistHeroHeader() {
           width={{ base: 'full', sm: 'auto' }}
           leftIcon={<HiOutlineComputerDesktop />}
         >
-          our work
+          {t('home.btnProjects')}
         </Button>
 
         <Button
@@ -76,7 +80,7 @@ export function MinimalistHeroHeader() {
           width={{ base: 'full', sm: 'auto' }}
           leftIcon={<HiFlag />}
         >
-          roadmap
+          {t('home.btnRoadmap')}
         </Button>
       </Stack>
     </Box>

@@ -78,6 +78,10 @@ export default function ProjectsPage() {
           {projects.map((project) => (
             <Card
               key={project.name}
+              as="a"
+              href={project.url}
+              target="_blank"
+              rel="noopener noreferrer"
               borderRadius="lg"
               overflow="hidden"
               variant="outline"
@@ -86,7 +90,9 @@ export default function ProjectsPage() {
               shadow="md"
               display="flex"
               flexDirection="column"
-              justifyContent="space-between"
+              transition="transform 0.2s ease, box-shadow 0.2s ease"
+              _hover={{ transform: 'translateY(-4px)', boxShadow: 'lg', textDecoration: 'none' }}
+              cursor="pointer"
             >
               <Box position="relative" paddingBottom="56.25%" width="100%" overflow="hidden">
                 <Image
@@ -122,22 +128,6 @@ export default function ProjectsPage() {
                   </Text>
                 </Stack>
               </CardBody>
-
-              <CardFooter padding="6" paddingTop="0">
-                <Button
-                  as="a"
-                  href={project.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  rightIcon={<Icon as={HiOutlineExternalLink} />}
-                  variant="solid"
-                  colorScheme="twitter"
-                  width="full"
-                  size="sm"
-                >
-                  {t('projects.visit')}
-                </Button>
-              </CardFooter>
             </Card>
           ))}
         </SimpleGrid>
